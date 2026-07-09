@@ -3,17 +3,17 @@
 USE feureka;
 
 -- Predefined categories for found_items and missing_reports
--- INSERT INTO categories (category_id, category_name) VALUES
---     (1, 'Electronics'),
---     (2, 'Documents & IDs'),
---     (3, 'Wallets & Purses'),
---     (4, 'Keys'),
---     (5, 'Clothing'),
---     (6, 'Bags'),
---     (7, 'Accessories'),
---     (8, 'School Supplies'),
---     (9, 'Personal Items'),
---     (10, 'Others');
+INSERT INTO categories (category_id, category_name) VALUES
+    (1, 'Electronics'),
+    (2, 'Documents & IDs'),
+    (3, 'Wallets & Purses'),
+    (4, 'Keys'),
+    (5, 'Clothing'),
+    (6, 'Bags'),
+    (7, 'Accessories'),
+    (8, 'School Supplies'),
+    (9, 'Personal Items'),
+    (10, 'Others');
 
 -- Registered users
 -- Passwords for local testing:
