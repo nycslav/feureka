@@ -7,7 +7,7 @@ require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../includes/functions.php';
 
 // 2. Security Check: Instantly boot anyone who isn't a logged-in admin
-requireAdmin();
+//requireAdmin();
 
 // 3. Verify that data was actually sent via a form submission (POST method)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

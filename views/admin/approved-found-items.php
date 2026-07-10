@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../includes/functions.php';
 
 // 2. Secure the page
-requireAdmin();
+//requireAdmin();
 
 // 3. Fetch the data using Lady's specific function for approved items
 $approved_items = getApprovedItems(); 

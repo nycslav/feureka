@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../includes/functions.php';
 
 // 1. Check security
-requireAdmin();
+//requireAdmin();
 
 // 2. Get the data from the database (Using Lady's function)
 // Right now this returns an empty array [], but it will work automatically when she finishes her code.

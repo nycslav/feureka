@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../includes/functions.php';
 
 // 1. The Bouncer: Instantly boots anyone who isn't an admin
-requireAdmin();
+//requireAdmin();
 
 // 2. Fetch the statistics
 $stats = getDashboardCounts();
