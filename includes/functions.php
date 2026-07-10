@@ -455,6 +455,130 @@ function getPendingItems(): array
     return feurekaFoundItemsByStatus(STATUS_PENDING);
 }
 
+/**
+ * Retrieve all missing item reports for the admin page.
+ *
+ * @return array
+ */
+function getMissingReports(): array
+{
+    return feurekaFetchAll(
+        'SELECT
+            mr.report_id,
+            mr.user_id,
+            mr.category_id,
+            c.category_name,
+            mr.item_name,
+            mr.item_description,
+            mr.room,
+            mr.floor,
+            mr.location_description,
+            mr.date_lost,
+            mr.contact_number,
+            mr.status,
+            mr.image,
+            mr.created_at,
+            mr.updated_at,
+            mr.processed_by,
+            mr.admin_notes,
+            reporter.first_name AS reporter_first_name,
+            reporter.last_name AS reporter_last_name,
+            reporter.email AS reporter_email,
+            reporter.user_type AS reporter_user_type,
+            admin.first_name AS processed_by_first_name,
+            admin.last_name AS processed_by_last_name,
+            admin.email AS processed_by_email
+        FROM missing_reports AS mr
+        INNER JOIN categories AS c ON c.category_id = mr.category_id
+        LEFT JOIN users AS reporter ON reporter.user_id = mr.user_id
+        LEFT JOIN users AS admin ON admin.user_id = mr.processed_by
+        ORDER BY mr.created_at DESC, mr.date_lost DESC'
+    );
+}
+
+/**
+ * Retrieve archived found items.
+ *
+ * @return array
+ */
+function getArchivedFoundItems(): array
+{
+    return feurekaFoundItemsByStatus(STATUS_ARCHIVED);
+}
+
+/**
+ * Retrieve archived missing item reports.
+ *
+ * @return array
+ */
+function getArchivedMissingReports(): array
+{
+    return feurekaFetchAll(
+        'SELECT
+            mr.report_id,
+            mr.user_id,
+            mr.category_id,
+            c.category_name,
+            mr.item_name,
+            mr.item_description,
+            mr.room,
+            mr.floor,
+            mr.location_description,
+            mr.date_lost,
+            mr.contact_number,
+            mr.status,
+            mr.image,
+            mr.created_at,
+            mr.updated_at,
+            mr.processed_by,
+            mr.admin_notes,
+            reporter.first_name AS reporter_first_name,
+            reporter.last_name AS reporter_last_name,
+            reporter.email AS reporter_email,
+            reporter.user_type AS reporter_user_type,
+            admin.first_name AS processed_by_first_name,
+            admin.last_name AS processed_by_last_name,
+            admin.email AS processed_by_email
+        FROM missing_reports AS mr
+        INNER JOIN categories AS c ON c.category_id = mr.category_id
+        LEFT JOIN users AS reporter ON reporter.user_id = mr.user_id
+        LEFT JOIN users AS admin ON admin.user_id = mr.processed_by
+        WHERE mr.status = ?
+        ORDER BY mr.created_at DESC, mr.date_lost DESC',
+        's',
+        [STATUS_ARCHIVED]
+    );
+}
+
+/**
+ * Retrieve registered users for the admin User Management page.
+ *
+ * @return array
+ */
+function getUsers(): array
+{
+    return feurekaFetchAll(
+        'SELECT
+            user_id,
+            first_name,
+            last_name,
+            email,
+            role,
+            user_type,
+            year_level,
+            expiration_date,
+            created_at
+        FROM users
+        ORDER BY
+            CASE WHEN role = ? THEN 0 ELSE 1 END,
+            user_type ASC,
+            last_name ASC,
+            first_name ASC',
+        's',
+        [ROLE_ADMIN]
+    );
+}
+
 
 /* ============================================================================
  * SEARCH & FILTER
