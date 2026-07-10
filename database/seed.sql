@@ -18,8 +18,8 @@ INSERT INTO categories (category_id, category_name) VALUES
 -- Registered users
 -- Passwords for local testing:
 -- Mark Andaya (Admin): Admin1@123
--- Alyssa Santos: Student1@123
--- Miguel Reyes: Student2@123
+-- Celina Espinola: Student1@123
+-- Syril Celis: Student2@123
 -- Sofia Cruz: Student3@123
 -- Mark Dela Cruz: Staff1@123
 INSERT INTO users (
