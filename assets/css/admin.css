@@ -74,24 +74,34 @@ body {
     color: #cccccc;
 }
 
-/* 6. Dashboard Grid (Side-by-side Layout) */
+/* 6. Dashboard Grid (Updated for 6-page layout) */
 .dashboard-grid {
-    display: flex;
-    gap: 20px;
-    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Creates 3 equal columns */
+    gap: 25px;
+    margin-top: 30px;
 }
 
-/* 7. The Stat Cards (Modeled after your gray item cards) */
+/* 7. The Dashboard Navigation Cards */
 .stat-card {
     background-color: #555555; 
     border-radius: 20px;
-    padding: 20px;
-    flex: 1;
+    padding: 30px 20px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; /* Keeps link text clean if the whole card is clickable */
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+/* Make the cards pop up when the mouse hovers over them */
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.7);
+    background-color: #444444; 
 }
 
 /* Card Titles (Gold, Italic) */
@@ -100,10 +110,11 @@ body {
     font-style: italic;
     text-transform: uppercase;
     margin-top: 0;
-    font-size: 1.1em;
+    margin-bottom: 10px;
+    font-size: 1.2em;
 }
 
-/* The giant numbers */
+/* The giant numbers (if you are showing counts) */
 .stat-number {
     font-size: 3.5em;
     font-weight: bold;
@@ -121,6 +132,8 @@ body {
     color: #000000;
     margin-top: 10px;
     transition: 0.2s;
+    border: none;
+    cursor: pointer;
 }
 
 .btn-primary {
@@ -133,4 +146,102 @@ body {
 
 .btn:hover {
     opacity: 0.8;
+}
+
+/* ==========================================================================
+   NEW ADDITIONS FOR UPDATE-ITEM-STATUS.PHP
+   ========================================================================== */
+
+/* 9. Form Container Card */
+.admin-form-card {
+    background-color: #555555; /* Matches the stat-card color */
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    max-width: 600px;
+    margin: 40px auto; /* Centers the form on the page */
+}
+
+.admin-form-card h4 {
+    color: #ffc107; /* Gold */
+    font-style: italic;
+    text-transform: uppercase;
+    margin-top: 0;
+    border-bottom: 2px solid #333333;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    font-size: 1.3em;
+}
+
+/* 10. Form Inputs & Labels */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #cccccc;
+    font-weight: bold;
+}
+
+.form-select,
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ffffff;
+    color: #000000;
+    font-family: inherit;
+    font-size: 1em;
+    box-sizing: border-box; /* Ensures padding doesn't break width */
+}
+
+.form-control {
+    resize: vertical; /* Allows users to drag the text area taller, but not wider */
+}
+
+.form-select:focus,
+.form-control:focus {
+    outline: 3px solid #ffc107; /* Gold focus ring */
+}
+
+/* Button Layout inside forms */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    align-items: center;
+}
+
+/* A specific cancel button style */
+.btn-outline-secondary {
+    background-color: transparent;
+    border: 2px solid #cccccc;
+    color: #cccccc;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #cccccc;
+    color: #000000;
+}
+
+/* 11. Alerts (Success and Error Messages) */
+.alert {
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.alert-danger {
+    background-color: #ff4c4c;
+    color: #ffffff;
+}
+
+.alert-success {
+    background-color: #4caf50;
+    color: #ffffff;
 }

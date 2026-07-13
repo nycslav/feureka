@@ -1,16 +1,12 @@
 <?php
-// views/admin/user-management.php
-
-// 1. Standard Wiring
-require_once __DIR__ . '/../../config/constants.php';
 require_once __DIR__ . '/../../config/session.php';
+require_once __DIR__ . '/../../config/constants.php';
 require_once __DIR__ . '/../../includes/functions.php';
 
-// 2. The Bouncer
-// requireAdmin(); // (Keep commented out for testing)
+// Ensure only admins can access this view
+requireAdmin();
 
-// 3. Fetch the users
-$users = getAllUsers(); 
+$users = getUsers();
 ?>
 
 <!DOCTYPE html>
@@ -18,87 +14,103 @@ $users = getAllUsers();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management - FEUreka</title>
+    <title>User Management - FEUreka Admin</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css"><!-- Add your CSS framework links here (e.g., Bootstrap or Tailwind) -->
 </head>
 <body>
-    <div class="admin-layout">
-        
-        <?php include __DIR__ . '/../../includes/admin-sidebar.php'; ?>
+    <!-- Replace with your actual admin sidebar/navbar inclusion -->
+    <?php // include __DIR__ . '/../partials/admin_navbar.php'; ?>
 
-        <main class="admin-content">
-            <header class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <h1>User Management</h1>
-                    <p>Manage staff accounts and monitor student data expiration.</p>
-                </div>
-                
-                <form action="../../actions/manage-users.php" method="POST">
-                    <input type="hidden" name="action" value="cleanup_expired">
-                    <button type="submit" style="background-color: #f44336; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
-                        Clean Up Expired Students
-                    </button>
-                </form>
-            </header>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>User Management</h2>
+        </div>
 
-            <table class="admin-table" style="width: 100%; border-collapse: collapse; margin-top: 20px; background-color: white; color: black; border-radius: 10px; overflow: hidden;">
-                <thead>
-                    <tr style="background-color: #0a4622; color: white; text-align: left;">
-                        <th style="padding: 15px; border-bottom: 2px solid #ccc;">Name</th>
-                        <th style="padding: 15px; border-bottom: 2px solid #ccc;">Email</th>
-                        <th style="padding: 15px; border-bottom: 2px solid #ccc;">Role</th>
-                        <th style="padding: 15px; border-bottom: 2px solid #ccc;">User Type</th>
-                        <th style="padding: 15px; border-bottom: 2px solid #ccc;">Expiration Date</th>
-                        <th style="padding: 15px; border-bottom: 2px solid #ccc;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    <?php if (empty($users)): ?>
-                        <tr>
-                            <td colspan="6" style="padding: 20px; text-align: center;">No users found in the system.</td>
-                        </tr>
-                    <?php else: ?>
-                        <?php foreach ($users as $user): ?>
+        <?php if (isset($_SESSION['success_message'])): ?>
+            <div class="alert alert-success">
+                <?= htmlspecialchars($_SESSION['success_message']) ?>
+            </div>
+            <?php unset($_SESSION['success_message']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['error_message'])): ?>
+            <div class="alert alert-danger">
+                <?= htmlspecialchars($_SESSION['error_message']) ?>
+            </div>
+            <?php unset($_SESSION['error_message']); ?>
+        <?php endif; ?>
+
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
                             <tr>
-                                <td style="padding: 15px; border-bottom: 1px solid #eee;">
-                                    <?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?>
-                                </td>
-                                <td style="padding: 15px; border-bottom: 1px solid #eee;"><?php echo htmlspecialchars($user['email']); ?></td>
-                                
-                                <td style="padding: 15px; border-bottom: 1px solid #eee;">
-                                    <strong><?php echo htmlspecialchars($user['role']); ?></strong>
-                                </td>
-                                
-                                <td style="padding: 15px; border-bottom: 1px solid #eee;">
-                                    <?php echo htmlspecialchars($user['user_type'] ?? 'N/A'); ?>
-                                </td>
-
-                                <td style="padding: 15px; border-bottom: 1px solid #eee;">
-                                    <?php echo htmlspecialchars($user['expiration_date'] ?? 'Permanent'); ?>
-                                </td>
-                                
-                                <td style="padding: 15px; border-bottom: 1px solid #eee;">
-                                    <?php if ($user['role'] === ROLE_ADMIN): ?>
-                                        <span style="color: gray; font-style: italic;">Protected</span>
-                                    <?php elseif ($user['user_type'] === USER_TYPE_STAFF): ?>
-                                        <form action="../../actions/manage-users.php" method="POST" style="display:inline;">
-                                            <input type="hidden" name="action" value="delete_staff">
-                                            <input type="hidden" name="target_user_id" value="<?php echo $user['user_id']; ?>">
-                                            <button type="submit" style="background-color: #d32f2f; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Delete Staff</button>
-                                        </form>
-                                    <?php else: ?>
-                                        <span style="color: gray; font-size: 0.9em;">Auto-expires</span>
-                                    <?php endif; ?>
-                                </td>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Type</th>
+                                <th>Academic Details</th>
+                                <th>Date Joined</th>
+                                <th>Actions</th>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-
-                </tbody>
-            </table>
-        </main>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($users)): ?>
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">No users found in the system.</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($users as $user): ?>
+                                    <tr>
+                                        <td>
+                                            <strong><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?></strong>
+                                        </td>
+                                        <td><?= htmlspecialchars($user['email']) ?></td>
+                                        <td>
+                                            <span class="badge <?= $user['role'] === ROLE_ADMIN ? 'bg-danger' : 'bg-primary' ?>">
+                                                <?= htmlspecialchars(strtoupper($user['role'])) ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <?= $user['user_type'] ? htmlspecialchars(ucfirst($user['user_type'])) : '<span class="text-muted">N/A</span>' ?>
+                                        </td>
+                                        <td>
+                                            <?php if ($user['user_type'] === USER_TYPE_STUDENT): ?>
+                                                <small>
+                                                    <strong>Year:</strong> <?= htmlspecialchars((string) $user['year_level']) ?><br>
+                                                    <strong>Exp:</strong> <?= htmlspecialchars((string) $user['expiration_date']) ?>
+                                                </small>
+                                            <?php else: ?>
+                                                <span class="text-muted">-</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?= htmlspecialchars(date('M d, Y', strtotime($user['created_at']))) ?></td>
+                                        <td>
+                                            <?php 
+                                            // Security Check: Only render the delete form if the user is a STAFF member
+                                            if ($user['role'] === ROLE_USER && $user['user_type'] === USER_TYPE_STAFF): 
+                                            ?>
+                                                <form action="../../actions/delete-staff.php" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to permanently delete this staff account? This action cannot be undone.');">
+                                                    <input type="hidden" name="user_id" value="<?= htmlspecialchars((string) $user['user_id']) ?>">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                                </form>
+                                            <?php else: ?>
+                                                <span class="text-muted small">No actions</span>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Replace with your actual footer inclusion -->
+    <?php // include __DIR__ . '/../partials/footer.php'; ?>
 </body>
 </html>
