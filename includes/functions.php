@@ -579,6 +579,22 @@ function getUsers(): array
     );
 }
 
+/**
+ * Retrieve all item categories.
+ *
+ * @return array
+ */
+function getCategories(): array
+{
+    return feurekaFetchAll(
+        'SELECT
+            category_id,
+            category_name
+        FROM categories
+        ORDER BY category_name ASC'
+    );
+}
+
 
 /* ============================================================================
  * SEARCH & FILTER
