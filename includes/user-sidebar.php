@@ -104,7 +104,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <div class="sidebar-footer">
 
             <a
-                href="../auth/logout.php"
+                href="../../actions/logout-actions.php"
                 class="sidebar-item logout">
 
                 <span class="material-symbols-outlined">
