@@ -1,0 +1,24 @@
+=========================================
+update-item-status.php
+=========================================
+
+Catching the Data ($_POST): When you click the green "Approve" button on your table, 
+the form packages up the item_id and the status (which you set to STATUS_APPROVED using your constants) 
+and hurls it at this file. The $_POST array acts like a catcher's mitt to grab those specific pieces of data.
+
+Safety First (isset and (int)): We never trust data coming from a browser. 
+isset() just makes sure the data actually arrived before we try to use it 
+(preventing ugly PHP warnings). Putting (int) in front of the ID forces it 
+to be a whole number, which is a great defense against hackers trying to inject malicious SQL code.
+
+The Audit Trail ($_SESSION['user_id']): Because Lady's database schema requires a 
+processed_by ID, we grab the currently logged-in Admin's ID directly from the session. 
+This leaves a permanent digital footprint of exactly who approved or rejected the item.
+
+The Handoff (updateItemStatus): This is the magic moment where your module connects to 
+Lady's. You feed her function the exact 5 ingredients it asked for.
+
+The Redirect (header("Location: ...")): A backend processing script like this shouldn't 
+display any HTML. Once it finishes its job, it uses the header() function to instantly 
+teleport the admin back to the page they were just on, adding a tiny ?msg=success to the 
+end of the URL so you can display a "Success!" popup later if you want.
