@@ -1,19 +1,23 @@
 <?php declare(strict_types=1);
 
-require_once '../../config/session.php';
-require_once '../../includes/functions.php';
+require_once __DIR__ . '/../../config/session.php';
+// TODO:
+// Uncomment after authentication integration.
+// requireLogin();
 
-require_once '../../includes/header.php';
-require_once '../../includes/navbar.php';
+require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/navbar.php';
 ?>
+<?php require_once __DIR__ . '/../../includes/user-sidebar.php'; ?>
 
 <main>
 
-    <?php require_once '../components/hero.php'; ?>
+    <?php require_once __DIR__ . '/../components/hero.php'; ?>
 
-    <?php require_once '../components/search-bar.php'; ?>
+    <?php require_once __DIR__ . '/../components/search-bar.php'; ?>
 
-    <?php require_once '../components/category-filter.php'; ?>
+    <?php require_once __DIR__ . '/../components/category-filter.php'; ?>
 
     <?php
 
@@ -35,7 +39,9 @@ require_once '../../includes/navbar.php';
 
                 <?php foreach ($items as $item): ?>
 
-                    <?php require '../components/found-item-card.php'; ?>
+                    <?php require __DIR__ . '/../components/found-item-card.php'; ?>
+
+                    <?php require __DIR__ . '/../components/item-details-modal.php'; ?>
 
                 <?php endforeach; ?>
 
@@ -47,4 +53,4 @@ require_once '../../includes/navbar.php';
 
 </main>
 
-<?php require_once '../../includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../../includes/footer.php'; ?>

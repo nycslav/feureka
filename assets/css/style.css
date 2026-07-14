@@ -619,3 +619,146 @@ main {
     white-space:nowrap;
 
 }
+
+/* ==========================================================
+   RESPONSIVE DESIGN
+========================================================== */
+
+/* ===========================
+   TABLET
+=========================== */
+
+@media (max-width: 992px) {
+
+    .hero-title{
+
+        font-size:3rem;
+
+    }
+
+    .item-modal{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .modal-image{
+
+        height:280px;
+
+    }
+
+}
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media (max-width:768px){
+
+    .navbar-container{
+
+        padding:0 16px;
+
+    }
+
+    .hero{
+
+        padding:60px 0 40px;
+
+    }
+
+    .hero-title{
+
+        font-size:2.4rem;
+
+    }
+
+    .hero-description{
+
+        font-size:1rem;
+
+    }
+
+    .hero-actions{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .btn{
+
+        width:100%;
+
+        text-align:center;
+
+    }
+
+    .search-input{
+
+        height:56px;
+
+    }
+
+    .items-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .item-modal{
+
+        width:100%;
+
+        height:100%;
+
+        border-radius:0;
+
+    }
+
+    .footer-container{
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+    .footer-links{
+
+        flex-direction:column;
+
+        gap:12px;
+
+    }
+
+}
+
+/* ===========================
+   SMALL MOBILE
+=========================== */
+
+@media (max-width:480px){
+
+    .hero-title{
+
+        font-size:2rem;
+
+    }
+
+    .section-title{
+
+        font-size:1.6rem;
+
+    }
+
+    .about-hero h1,
+    .faq-hero h1{
+
+        font-size:2.2rem;
+
+    }
+
+}

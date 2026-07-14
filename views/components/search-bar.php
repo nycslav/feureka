@@ -24,6 +24,7 @@
             </span>
 
             <input
+                id="search-input"
                 type="search"
                 name="search"
                 class="search-input"

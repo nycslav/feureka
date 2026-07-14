@@ -1,4 +1,7 @@
-<article class="item-card">
+<article
+    class="item-card"
+    data-name="<?= htmlspecialchars(strtolower($item['item_name'])) ?>"
+    data-category="<?= htmlspecialchars(strtolower($item['category_name'])) ?>">
 
     <div class="item-image">
 
@@ -69,9 +72,9 @@
         </div>
 
         <button
-            class="btn btn-primary item-button"
+            class="btn btn-primary item-button open-modal-btn"
             type="button"
-            data-item-id="<?= htmlspecialchars((string)$item['item_id']) ?>">
+            data-modal="item-modal-<?= (int)$item['item_id']; ?>">
 
             View Details
 
