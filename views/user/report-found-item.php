@@ -132,11 +132,21 @@ require_once __DIR__ . '/../../includes/user-sidebar.php';
 
                                 </label>
 
-                                <input
-                                    type="date"
-                                    id="date_found"
-                                    name="date_found"
-                                    required>
+                                <div class="input-wrapper">
+
+                                    <span class="material-symbols-outlined input-icon">
+
+                                        calendar_today
+
+                                    </span>
+
+                                    <input
+                                        type="date"
+                                        id="date_found"
+                                        name="date_found"
+                                        required>
+
+                                </div>
 
                                 <small class="error-message"></small>
 
@@ -272,16 +282,26 @@ require_once __DIR__ . '/../../includes/user-sidebar.php';
 
                             <label for="location_description">
 
-                                Location Description
+                                Specific Location
 
                             </label>
 
-                            <textarea
-                                id="location_description"
-                                name="location_description"
-                                rows="3"
-                                placeholder="Describe exactly where the item was found."
-                                required></textarea>
+                            <div class="input-wrapper textarea-wrapper">
+
+                                <span class="material-symbols-outlined input-icon">
+
+                                    location_on
+
+                                </span>
+
+                                <textarea
+                                    id="location_description"
+                                    name="location_description"
+                                    rows="3"
+                                    placeholder="Describe exactly where the item was found."
+                                    required></textarea>
+
+                            </div>
 
                             <small class="error-message"></small>
 
@@ -310,31 +330,61 @@ require_once __DIR__ . '/../../includes/user-sidebar.php';
 
                             <label
                                 class="upload-area"
-                                for="image">
+                                for="image"
+                                id="uploadArea">
 
-                                <span class="material-symbols-outlined upload-icon">
+                                <img
+                                    id="imagePreview"
+                                    class="upload-preview"
+                                    hidden
+                                    alt="Preview">
 
-                                    cloud_upload
+                                <div id="uploadContent">
 
-                                </span>
+                                    <span class="material-symbols-outlined upload-icon">
 
-                                <span class="upload-title">
+                                        cloud_upload
 
-                                    Upload an Image
+                                    </span>
 
-                                </span>
+                                    <span class="upload-title">
 
-                                <span class="upload-subtitle">
+                                        Upload Item Photo
 
-                                    Click to browse your device
+                                    </span>
 
-                                </span>
+                                    <span class="upload-subtitle">
 
-                                <span class="upload-format">
+                                        Click to browse your device
 
-                                    JPG • JPEG • PNG • WEBP
+                                    </span>
 
-                                </span>
+                                    <span class="upload-format">
+
+                                        JPG • JPEG • PNG • WEBP
+
+                                    </span>
+
+                                </div>
+
+                                <div
+                                    id="replaceOverlay"
+                                    class="replace-overlay"
+                                    hidden>
+
+                                    <span class="material-symbols-outlined">
+
+                                        cached
+
+                                    </span>
+
+                                    <span>
+
+                                        Change Image
+
+                                    </span>
+
+                                </div>
 
                             </label>
 
@@ -381,6 +431,42 @@ require_once __DIR__ . '/../../includes/user-sidebar.php';
     </section>
 
 </main>
+
+<script>
+
+const imageInput = document.getElementById('image');
+
+const preview = document.getElementById('imagePreview');
+
+const uploadContent = document.getElementById('uploadContent');
+
+const overlay = document.getElementById('replaceOverlay');
+
+imageInput.addEventListener('change', function () {
+
+    if (!this.files.length) return;
+
+    const file = this.files[0];
+
+    const reader = new FileReader();
+
+    reader.onload = ({ target }) => {
+
+        preview.src = target.result;
+
+        preview.hidden = false;
+
+        uploadContent.hidden = true;
+
+        overlay.hidden = false;
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+</script>
 
 <script src="../../assets/js/validation.js"></script>
 
