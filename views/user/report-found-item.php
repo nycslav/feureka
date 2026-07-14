@@ -8,10 +8,6 @@ require_once '../../includes/functions.php';
 |--------------------------------------------------------------------------
 | Load Categories
 |--------------------------------------------------------------------------
-|
-| Retrieve all available item categories from the database.
-| This is read-only and keeps the dropdown synchronized with the database.
-|
 */
 
 $categories = [];
@@ -25,179 +21,367 @@ $result = $conn->query("
 if ($result) {
     $categories = $result->fetch_all(MYSQLI_ASSOC);
 }
+
+$pageTitle = 'Report Found Item | FEUreka';
+
+require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/navbar.php';
+require_once __DIR__ . '/../../includes/user-sidebar.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<main>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <section class="report-section">
 
-    <title>Report Found Item</title>
+        <div class="container">
 
-    <!-- CSS will be added later by Member 2 -->
-</head>
+            <div class="report-header">
 
-<body>
+                <h1 class="page-title">
 
-<h1>Report Found Item</h1>
+                    Report Found Item
 
-<form
-    id="foundItemForm"
-    action="../../actions/submit-found-item.php"
-    method="POST"
-    enctype="multipart/form-data">
+                </h1>
 
-    <!-- Category -->
-    <div>
-        <label for="category_id">Category</label>
+                <p class="page-description">
 
-        <select
-            id="category_id"
-            name="category_id"
-            required>
+                    Found an item inside FEU Tech?
 
-            <option value="">-- Select Category --</option>
+                    Complete the form below and submit it for administrator review.
 
-            <?php foreach ($categories as $category): ?>
+                </p>
 
-                <option value="<?= htmlspecialchars($category['category_id']) ?>">
-                    <?= htmlspecialchars($category['category_name']) ?>
-                </option>
+            </div>
 
-            <?php endforeach; ?>
+            <div class="report-card">
 
-        </select>
+                <form
+                    id="foundItemForm"
+                    action="../../actions/submit-found-item.php"
+                    method="POST"
+                    enctype="multipart/form-data">
 
-        <small class="error-message"></small>
-    </div>
+                    <!-- ====================================================== -->
+                    <!-- BASIC INFORMATION -->
+                    <!-- ====================================================== -->
 
-    <!-- Item Name -->
-    <div>
+                    <div class="report-group">
 
-        <label for="item_name">Item Name</label>
+                        <h2 class="report-group-title">
 
-        <input
-            type="text"
-            id="item_name"
-            name="item_name"
-            required>
+                            Basic Information
 
-        <small class="error-message"></small>
+                        </h2>
 
-    </div>
+                        <div class="report-grid">
 
-    <!-- Description -->
-    <div>
+                            <div class="form-group">
 
-        <label for="item_description">
-            Description
-        </label>
+                                <label for="category_id">
 
-        <textarea
-            id="item_description"
-            name="item_description"
-            rows="4"
-            required></textarea>
+                                    Category
 
-        <small class="error-message"></small>
+                                </label>
 
-    </div>
+                                <div class="input-wrapper">
 
-    <!-- Room -->
-    <div>
+                                    <span class="material-symbols-outlined input-icon">
 
-        <label for="room">
-            Room
-        </label>
+                                        category
 
-        <input
-            type="text"
-            id="room"
-            name="room"
-            required>
+                                    </span>
 
-        <small class="error-message"></small>
+                                    <select
+                                        id="category_id"
+                                        name="category_id"
+                                        required>
 
-    </div>
+                                        <option value="">
+                                            -- Select Category --
+                                        </option>
 
-    <!-- Floor -->
-    <div>
+                                        <?php foreach ($categories as $category): ?>
 
-        <label for="floor">
-            Floor
-        </label>
+                                            <option value="<?= htmlspecialchars($category['category_id']) ?>">
 
-        <input
-            type="text"
-            id="floor"
-            name="floor"
-            required>
+                                                <?= htmlspecialchars($category['category_name']) ?>
 
-        <small class="error-message"></small>
+                                            </option>
 
-    </div>
+                                        <?php endforeach; ?>
 
-    <!-- Location Description -->
-    <div>
+                                    </select>
 
-        <label for="location_description">
-            Location Description
-        </label>
+                                    <span class="material-symbols-outlined select-arrow">
 
-        <textarea
-            id="location_description"
-            name="location_description"
-            rows="3"
-            required></textarea>
+                                        expand_more
 
-        <small class="error-message"></small>
+                                    </span>
 
-    </div>
+                                </div>
 
-    <!-- Date Found -->
-    <div>
+                                <small class="error-message"></small>
 
-        <label for="date_found">
-            Date Found
-        </label>
+                            </div>
 
-        <input
-            type="date"
-            id="date_found"
-            name="date_found"
-            required>
+                            <div class="form-group">
 
-        <small class="error-message"></small>
+                                <label for="date_found">
 
-    </div>
+                                    Date Found
 
-    <!-- Image -->
-    <div>
+                                </label>
 
-        <label for="image">
-            Upload Image
-        </label>
+                                <input
+                                    type="date"
+                                    id="date_found"
+                                    name="date_found"
+                                    required>
 
-        <input
-            type="file"
-            id="image"
-            name="image"
-            accept=".jpg,.jpeg,.png,.webp"
-            required>
+                                <small class="error-message"></small>
 
-        <small class="error-message"></small>
+                            </div>
 
-    </div>
+                        </div>
 
-    <button type="submit">
-        Submit Report
-    </button>
+                        <div class="form-group">
 
-</form>
+                            <label for="item_name">
+
+                                Item Name
+
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <span class="material-symbols-outlined input-icon">
+
+                                    inventory_2
+
+                                </span>
+
+                                <input
+                                    type="text"
+                                    id="item_name"
+                                    name="item_name"
+                                    placeholder="Enter the item name"
+                                    required>
+
+                            </div>
+
+                            <small class="error-message"></small>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="item_description">
+
+                                Description
+
+                            </label>
+
+                            <textarea
+                                id="item_description"
+                                name="item_description"
+                                rows="4"
+                                placeholder="Describe the appearance, color, brand, and other details."
+                                required></textarea>
+
+                            <small class="error-message"></small>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ====================================================== -->
+                    <!-- LOCATION -->
+                    <!-- ====================================================== -->
+
+                    <div class="report-group">
+
+                        <h2 class="report-group-title">
+
+                            Location
+
+                        </h2>
+
+                        <div class="report-grid">
+
+                            <div class="form-group">
+
+                                <label for="room">
+
+                                    Room
+
+                                </label>
+
+                                <div class="input-wrapper">
+
+                                    <span class="material-symbols-outlined input-icon">
+
+                                        meeting_room
+
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        id="room"
+                                        name="room"
+                                        placeholder="Example: Room 402"
+                                        required>
+
+                                </div>
+
+                                <small class="error-message"></small>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="floor">
+
+                                    Floor
+
+                                </label>
+
+                                <div class="input-wrapper">
+
+                                    <span class="material-symbols-outlined input-icon">
+
+                                        apartment
+
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        id="floor"
+                                        name="floor"
+                                        placeholder="Example: 4th Floor"
+                                        required>
+
+                                </div>
+
+                                <small class="error-message"></small>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="location_description">
+
+                                Location Description
+
+                            </label>
+
+                            <textarea
+                                id="location_description"
+                                name="location_description"
+                                rows="3"
+                                placeholder="Describe exactly where the item was found."
+                                required></textarea>
+
+                            <small class="error-message"></small>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ====================================================== -->
+                    <!-- EVIDENCE -->
+                    <!-- ====================================================== -->
+                                         <div class="report-group">
+
+                        <h2 class="report-group-title">
+
+                            Evidence
+
+                        </h2>
+
+                        <div class="form-group">
+
+                            <label for="image">
+
+                                Upload Image
+
+                            </label>
+
+                            <label
+                                class="upload-area"
+                                for="image">
+
+                                <span class="material-symbols-outlined upload-icon">
+
+                                    cloud_upload
+
+                                </span>
+
+                                <span class="upload-title">
+
+                                    Upload an Image
+
+                                </span>
+
+                                <span class="upload-subtitle">
+
+                                    Click to browse your device
+
+                                </span>
+
+                                <span class="upload-format">
+
+                                    JPG • JPEG • PNG • WEBP
+
+                                </span>
+
+                            </label>
+
+                            <input
+                                type="file"
+                                id="image"
+                                name="image"
+                                accept=".jpg,.jpeg,.png,.webp"
+                                required
+                                hidden>
+
+                            <small class="error-message"></small>
+
+                        </div>
+
+                    </div>
+
+                    <div class="report-actions">
+
+                        <button
+                            class="auth-button"
+                            type="submit">
+
+                            Submit Report
+
+                        </button>
+
+                        <button
+                            class="report-secondary-button"
+                            type="reset">
+
+                            Clear Form
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
 
 <script src="../../assets/js/validation.js"></script>
 
-</body>
-</html>
+<?php require_once __DIR__ . '/../../includes/footer.php'; ?>

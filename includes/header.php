@@ -21,7 +21,6 @@
     <!-- Global Styles -->
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link rel="stylesheet" href="../../assets/css/user.css">
-    <link rel="stylesheet" href="../../assets/css/modal.css">
     <link rel="stylesheet" href="../../assets/css/forms.css">
 </head>
 

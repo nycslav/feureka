@@ -1,0 +1,322 @@
+/* ==========================================================
+   USER SIDEBAR
+========================================================== */
+
+.sidebar-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    backdrop-filter:blur(4px);
+
+    visibility:hidden;
+
+    opacity:0;
+
+    transition:.25s;
+
+    z-index:9000;
+
+}
+
+.sidebar-overlay.active{
+
+    visibility:visible;
+
+    opacity:1;
+
+}
+
+.sidebar{
+
+    position:absolute;
+
+    top:0;
+
+    left:-320px;
+
+    width:300px;
+
+    height:100%;
+
+    background:#1E2420;
+
+    display:flex;
+
+    flex-direction:column;
+
+    transition:left .25s ease;
+
+    padding:30px 22px;
+
+}
+
+.sidebar-overlay.active .sidebar{
+
+    left:0;
+
+}
+
+.sidebar-header{
+
+    margin-bottom:40px;
+    padding-top:8px;
+
+}
+
+.sidebar-logo{
+
+    width:120px;
+
+}
+
+.sidebar-menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    flex:1;
+
+}
+
+.sidebar-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    padding:14px 18px;
+
+    border-radius:12px;
+
+    color:#F5F5F5;
+
+    text-decoration:none;
+
+    transition:.2s;
+
+}
+
+.sidebar-item:hover{
+
+    background:#2C332E;
+
+}
+
+.sidebar-item.active{
+
+    background:#FFD166;
+
+    color:#111;
+
+}
+
+.sidebar-item
+.material-symbols-outlined{
+
+    font-size:22px;
+
+}
+
+.sidebar-footer{
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+    padding-top:20px;
+
+}
+
+.logout{
+
+    color:#FFB6B6;
+
+}
+
+.logout:hover{
+
+    background:#412828;
+
+}
+
+/* ==========================================================
+   ABOUT PAGE
+========================================================== */
+
+.about-page{
+
+    padding:80px 0;
+
+}
+
+.about-hero{
+
+    margin-bottom:60px;
+
+}
+
+.about-hero h1{
+
+    font-size:3.5rem;
+
+    margin-bottom:20px;
+
+}
+
+.about-hero p{
+
+    max-width:700px;
+
+    font-size:1.2rem;
+
+    color:#C8D0CB;
+
+    line-height:1.7;
+
+}
+
+.about-section{
+
+    margin-bottom:60px;
+
+}
+
+.about-section h2{
+
+    font-size:2rem;
+
+    margin-bottom:24px;
+
+}
+
+.feature-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+    gap:24px;
+
+}
+
+.feature-card{
+
+    background:#202621;
+
+    border-radius:18px;
+
+    padding:30px;
+
+}
+
+.feature-card
+.material-symbols-outlined{
+
+    font-size:40px;
+
+    color:#F7C54D;
+
+    margin-bottom:20px;
+
+}
+
+.feature-card h3{
+
+    margin-bottom:14px;
+
+}
+
+.feature-card p{
+
+    color:#C6D1CC;
+
+    line-height:1.6;
+
+}
+
+/* ==========================================================
+   FAQ PAGE
+========================================================== */
+
+.faq-page{
+
+    padding:80px 0;
+
+}
+
+.faq-hero{
+
+    margin-bottom:50px;
+
+}
+
+.faq-hero h1{
+
+    font-size:3.5rem;
+
+    margin-bottom:18px;
+
+}
+
+.faq-hero p{
+
+    color:#C8D0CB;
+
+    font-size:1.2rem;
+
+}
+
+.faq-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+.faq-item{
+
+    background:#202621;
+
+    border-radius:16px;
+
+    padding:24px;
+
+}
+
+.faq-item summary{
+
+    cursor:pointer;
+
+    font-size:1.15rem;
+
+    font-weight:600;
+
+    list-style:none;
+
+}
+
+.faq-item summary::-webkit-details-marker{
+
+    display:none;
+
+}
+
+.faq-item p{
+
+    margin-top:18px;
+
+    color:#C8D0CB;
+
+    line-height:1.7;
+
+}
