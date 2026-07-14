@@ -136,6 +136,8 @@
     font-weight:600;
 
     font-size:.95rem;
+    
+    padding-top:6px;
 
 }
 
@@ -160,8 +162,6 @@
 
     font-size:1rem;
 
-    transition:all .2s ease;
-
     appearance:none;
 
     -webkit-appearance:none;
@@ -179,7 +179,8 @@
 }
 
 .form-group input:focus,
-.form-group select:focus{
+.form-group select:focus,
+.form-group textarea:focus{
 
     background:#171D19;
 
@@ -188,35 +189,37 @@
 
 }
 
-.auth-button{
-
-    height:56px;
-
-    border:none;
-
-    border-radius:999px;
-
-    background:#F7C54D;
-
-    color:#1A1A1A;
-
-    font-size:1rem;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:all .2s ease;
-
+/* ==========================================================
+   BUTTON STYLING & ALIGNMENT
+========================================================== */
+.auth-button {
+    height: 56px;
+    width: 240px;
+    border: none;
+    border-radius: 999px;
+    background: #F7C54D;
+    color: #1A1A1A;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    
+    /* Add these Flexbox properties to perfectly center the icon and text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Adds consistent breathing room between the icon and text */
 }
 
-.auth-button:hover{
+.auth-button:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 12px 28px rgba(247, 197, 77, 0.20);
+}
 
-    transform:translateY(-2px) scale(1.01);
-
-    box-shadow:
-        0 12px 28px rgba(247,197,77,.20);
-
+/* Size the icon so it doesn't overpower the text */
+.auth-button .material-symbols-outlined {
+    font-size: 22px; 
+    margin-top: -2px; /* Slight optical adjustment to center the icon weight */
 }
 
 .auth-link{
@@ -281,15 +284,13 @@
 
 }
 
-.auth-button:hover{
-
-    transform:translateY(-2px);
-
-    box-shadow:0 10px 24px rgba(247,197,77,.18);
-
-}
-
 .auth-message{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:12px;
 
     padding:16px;
 
@@ -298,6 +299,8 @@
     margin-bottom:24px;
 
     font-size:.95rem;
+
+    line-height:1.6;
 
 }
 
@@ -402,4 +405,235 @@
 
     font-size:22px;
 
+}
+
+.auth-message.info {
+    background: rgba(139, 210, 166, 0.05);
+    border: 1px solid rgba(139, 210, 166, 0.2);
+    border-left: 4px solid #8BD2A6;
+    color: #C6D1CC;
+    border-radius: 8px;
+    padding: 16px 20px;
+}
+
+.auth-message.info .material-symbols-outlined {
+    color: #8BD2A6;
+}
+
+.auth-message .material-symbols-outlined{
+
+    color:#F7C54D;
+
+    font-size:22px;
+
+    flex-shrink:0;
+
+    margin-top:2px;
+
+}
+
+input[readonly] {
+    background: repeating-linear-gradient(
+        45deg,
+        #171D19,
+        #171D19 10px,
+        #1B211D 10px,
+        #1B211D 20px
+    ) !important;
+    color: #8A938D;
+    cursor: not-allowed;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.report-card{
+
+    max-width:760px;
+
+    margin:0 auto;
+
+}
+
+.profile-actions{
+
+    justify-content:center;
+
+    margin-top:20px;
+
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 12px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #F7C54D, #D4A030);
+    color: #001B11;
+    font-size: 2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(247, 197, 77, 0.2);
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: flex-end; /* Aligns items to the right */
+    align-items: center;
+    gap: 24px;
+    margin-top: 20px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.profile-cancel-link {
+    color: #A5ACA8;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.profile-cancel-link:hover {
+    color: #F5F5F5;
+}
+
+/* ==========================================================
+   PROFILE HEADER ALIGNMENT (GRID LAYOUT)
+========================================================== */
+.profile-header-info {
+    display: grid;
+    /* This maps out the layout: Name and Badge on top, Email spans the bottom */
+    grid-template-areas: 
+        "name badge"
+        "email email";
+    align-items: center; /* Vertically centers the name and badge together */
+    justify-content: start; /* Keeps everything anchored to the left */
+    column-gap: 16px; /* Space between the name and the badge */
+    row-gap: 8px; /* Space between the top row and the email below it */
+}
+
+.profile-name {
+    grid-area: name;
+    margin: 0;
+    font-size: 1.8rem;
+    line-height: 1.2;
+}
+
+.profile-badge {
+    grid-area: badge;
+    background: rgba(247, 197, 77, 0.1);
+    color: #F7C54D;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    width: fit-content;
+    margin: 0; /* Resetting margin so it perfectly aligns with the name */
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.profile-email {
+    grid-area: email;
+    color: #C6D1CC;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.profile-email .material-symbols-outlined,
+.profile-badge .material-symbols-outlined {
+    font-size: 18px; 
+}
+/* ==========================================================
+   FORM GRID & SPACING
+========================================================== */
+.report-group {
+    margin-bottom: 20px; /* Separates Personal Info from Account Info */
+}
+
+.report-group-title {
+    font-size: 1.25rem;
+    color: #F7C54D;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.report-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Puts First Name and Last Name side-by-side */
+    gap: 24px;
+}
+
+/* Make grid responsive for mobile */
+@media (max-width: 768px) {
+    .report-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================
+   LOCK ICON POSITIONING
+========================================================== */
+.lock-icon {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #5A635D;
+    pointer-events: none; /* Prevents the icon from blocking clicks */
+}
+
+/* Ensure right padding so text doesn't overlap the lock icon */
+.input-wrapper input[readonly] {
+    padding-right: 52px;
+}
+
+/* ==========================================================
+   REPORT HEADER ALIGNMENT & TYPOGRAPHY
+========================================================== */
+.report-header {
+    max-width: 760px; /* Matches the width of the .report-card */
+    margin: 0 auto 32px auto; /* Centers the header and adds bottom spacing */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.page-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+    letter-spacing: -0.5px; /* Gives the heading a sleeker, modern feel */
+}
+
+.page-description {
+    font-size: 1.1rem;
+    color: #A5ACA8; /* Slightly muted text to contrast with the bright title */
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Make the title responsive for mobile screens */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2.2rem;
+    }
+    
+    .page-description {
+        font-size: 1rem;
+    }
 }
