@@ -103,6 +103,7 @@
                         type="email"
                         id="email"
                         name="email"
+                        placeholder="Enter your FEU Tech email"
                         required
                         autofocus>
                 </div>
@@ -120,16 +121,27 @@
                 <div class="input-wrapper">
 
                     <span class="material-symbols-outlined input-icon">
-
                         lock
-
                     </span>
 
                     <input
                         type="password"
                         id="password"
                         name="password"
+                        placeholder="Enter your password"
                         required>
+
+                    <button
+                        class="password-toggle"
+                        type="button"
+                        aria-label="Toggle Password">
+
+                        <span class="material-symbols-outlined">
+                            visibility
+                        </span>
+
+                    </button>
+
                 </div>
 
             </div>
@@ -162,3 +174,33 @@
 
 </body>
 </html>
+
+<script>
+
+document.querySelectorAll('.password-toggle').forEach(button => {
+
+    button.addEventListener('click', () => {
+
+        const input = button.parentElement.querySelector('input');
+
+        const icon = button.querySelector('.material-symbols-outlined');
+
+        if (input.type === 'password') {
+
+            input.type = 'text';
+
+            icon.textContent = 'visibility_off';
+
+        } else {
+
+            input.type = 'password';
+
+            icon.textContent = 'visibility';
+
+        }
+
+    });
+
+});
+
+</script>

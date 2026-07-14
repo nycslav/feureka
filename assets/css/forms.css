@@ -18,24 +18,32 @@
         radial-gradient(circle at top left,
         rgba(139,210,166,.08),
         transparent 35%),
-        #001B11;
 
+        radial-gradient(circle at bottom right,
+        rgba(247,197,77,.05),
+        transparent 40%),
+
+        #001B11;
 }
 
 .auth-card{
 
     width:100%;
-
     max-width:540px;
 
     background:#202621;
 
-    border-radius:24px;
+    border:1px solid rgba(255,255,255,.04);
 
-    padding:48px;
+    border-radius:28px;
+
+    padding: 20px 48px 48px 48px;
 
     box-shadow:
-        0 20px 60px rgba(0,0,0,.45);
+        0 24px 70px rgba(0,0,0,.45);
+
+    animation:fadeUp .45s ease;
+
 
 }
 
@@ -43,29 +51,56 @@
 
     text-align:center;
 
-    margin-bottom:48px;
+    margin-bottom:20px;
 
 }
 
 .auth-logo{
 
-    width:220px;
+    width:200px;
+
+    margin-bottom:5px;
 
 }
 
 .auth-brand h1{
 
-    font-size:3rem;
+    font-size:3.2rem;
 
-    margin-bottom:12px;
+    line-height:1.1;
 
+    margin-bottom:16px;
 }
 
 .auth-brand p{
 
     color:#C6D1CC;
 
-    line-height:1.6;
+    line-height:1.7;
+
+    max-width:320px;
+
+    margin:0 auto;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
 
 }
 
@@ -111,7 +146,7 @@
 
     height:58px;
 
-    padding:0 18px;
+    padding:0 48px 0 52px;
 
     border:none;
 
@@ -127,18 +162,29 @@
 
     transition:all .2s ease;
 
+    appearance:none;
+
+    -webkit-appearance:none;
+
+    -moz-appearance:none;
+
+    transition:all .25s ease;
+
 }
 
 .form-group input::placeholder{
 
-    color:#7D857F;
+    color:#909A93;
 
 }
 
 .form-group input:focus,
 .form-group select:focus{
 
-    box-shadow:0 0 0 3px rgba(247,197,77,.25);
+    background:#171D19;
+
+    box-shadow:
+        0 0 0 3px rgba(247,197,77,.22);
 
 }
 
@@ -166,9 +212,10 @@
 
 .auth-button:hover{
 
-    transform:translateY(-2px);
+    transform:translateY(-2px) scale(1.01);
 
-    box-shadow:0 10px 24px rgba(247,197,77,.18);
+    box-shadow:
+        0 12px 28px rgba(247,197,77,.20);
 
 }
 
@@ -214,13 +261,17 @@
 
     transform:translateY(-50%);
 
-    color:#7D857F;
+    color:#8D968F;
 
+    transition:color .25s ease;
 }
 
-.input-wrapper input{
+.input-wrapper input,
+.input-wrapper select{
 
     padding-left:52px;
+
+    padding-right:52px;
 
 }
 
@@ -267,5 +318,88 @@
     color:#D8FFE6;
 
     border:1px solid #4EAF74;
+
+}
+
+.select-arrow{
+
+    position:absolute;
+
+    top:50%;
+
+    right:18px;
+
+    transform:translateY(-50%);
+
+    color:#8A938D;
+
+    pointer-events:none;
+
+    transition:color .25s ease;
+
+}
+
+.input-wrapper:hover .select-arrow{
+
+    color:#F7C54D;
+
+}
+
+.input-wrapper:focus-within .select-arrow{
+
+    color:#F7C54D;
+
+}
+
+
+.input-wrapper:focus-within .input-icon{
+
+    color:#F7C54D;
+
+}
+
+/* ==========================================================
+   PASSWORD TOGGLE
+========================================================== */
+
+.password-toggle{
+
+    position:absolute;
+
+    right:18px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    border:none;
+
+    background:none;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:#8A938D;
+
+    transition:all .25s ease;
+
+}
+
+.password-toggle:hover{
+
+    color:#F7C54D;
+
+    transform:translateY(-50%) scale(1.08);
+
+}
+
+.password-toggle .material-symbols-outlined{
+
+    font-size:22px;
 
 }
