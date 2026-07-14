@@ -192,23 +192,42 @@
 /* ==========================================================
    BUTTON STYLING & ALIGNMENT
 ========================================================== */
-.auth-button {
-    height: 56px;
-    width: 240px;
-    border: none;
-    border-radius: 999px;
-    background: #F7C54D;
-    color: #1A1A1A;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    
-    /* Add these Flexbox properties to perfectly center the icon and text */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px; /* Adds consistent breathing room between the icon and text */
+.auth-button{
+
+    width:100%;
+
+    height:56px;
+
+    border:none;
+
+    border-radius:999px;
+
+    background:#F7C54D;
+
+    color:#1A1A1A;
+
+    font-size:1rem;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:all .25s ease;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+}
+
+.profile-actions .auth-button{
+
+    width:240px;
+
 }
 
 .auth-button:hover {
