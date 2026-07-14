@@ -5,10 +5,7 @@ require_once __DIR__ . '/../../includes/functions.php';
 
 requireAdmin();
 
-// Fetch the statistics from the database
 $counts = getDashboardCounts();
-
-// Fetch all users to get the total account count for the new User Management card
 $users = getUsers();
 $totalUsers = count($users);
 ?>
@@ -19,80 +16,87 @@ $totalUsers = count($users);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - FEUreka</title>
-    <!-- Link to your custom CSS -->
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <!-- Custom Admin CSS -->
     <link rel="stylesheet" href="../../assets/css/admin.css">
 </head>
 <body>
 
     <div class="admin-layout">
         
-        <!-- SIDEBAR NAVIGATION -->
+        <!-- SIDEBAR -->
+                <!-- THE UNIFORM SIDEBAR -->
+        <?php 
+            // Pure PHP way to get the current file name (e.g., "user-management.php")
+            $currentPage = basename($_SERVER['PHP_SELF']); 
+        ?>
         <aside class="admin-sidebar">
             <div class="sidebar-header">
                 <h2>FEUreka Admin</h2>
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="dashboard.php">Dashboard</a></li>
-                    <li><a href="pending-found-items.php">Pending Found Items</a></li>
-                    <li><a href="approved-found-items.php">Approved Found Items</a></li>
-                    <li><a href="missing-item-reports.php">Missing Item Reports</a></li>
-                    <li><a href="archive-records.php">Archive Records</a></li>
-                    <li><a href="user-management.php">User Management</a></li>
+                    <li><a href="dashboard.php" class="<?= $currentPage === 'dashboard.php' ? 'active' : '' ?>">Dashboard</a></li>
+                    <li><a href="pending-found-items.php" class="<?= $currentPage === 'pending-found-items.php' ? 'active' : '' ?>">Pending Found Items</a></li>
+                    <li><a href="approved-found-items.php" class="<?= $currentPage === 'approved-found-items.php' ? 'active' : '' ?>">Approved Found Items</a></li>
+                    <li><a href="missing-item-reports.php" class="<?= $currentPage === 'missing-item-reports.php' ? 'active' : '' ?>">Missing Item Reports</a></li>
+                    <li><a href="archive-records.php" class="<?= $currentPage === 'archive-records.php' ? 'active' : '' ?>">Archive Records</a></li>
+                    <li><a href="user-management.php" class="<?= $currentPage === 'user-management.php' ? 'active' : '' ?>">User Management</a></li>
                 </ul>
             </nav>
         </aside>
 
-        <!-- MAIN CONTENT AREA -->
+        <!-- MAIN CONTENT -->
         <main class="admin-content">
             <div class="admin-header">
                 <h1>Admin Dashboard</h1>
-                <p>Welcome back! Here is an overview of the FEUreka system.</p>
+                <p>Welcome back! System overview and active reports.</p>
             </div>
 
-            <!-- THE 6-PAGE GRID SYSTEM -->
+            <!-- UNIFORM FLASHCARDS GRID -->
             <div class="dashboard-grid">
                 
-                <!-- 1. Pending Found Items -->
+                <!-- 1. Pending -->
                 <a href="pending-found-items.php" class="stat-card">
-                    <h3>Pending Items</h3>
+                    <span class="material-symbols-outlined stat-icon">hourglass_empty</span>
                     <div class="stat-number"><?= htmlspecialchars((string)$counts['pending_found_items']) ?></div>
-                    <span class="btn btn-secondary">Review Needed</span>
+                    <div class="stat-label">Pending Items</div>
                 </a>
 
-                <!-- 2. Approved Found Items -->
+                <!-- 2. Approved -->
                 <a href="approved-found-items.php" class="stat-card">
-                    <h3>Approved Items</h3>
+                    <span class="material-symbols-outlined stat-icon">check_circle</span>
                     <div class="stat-number"><?= htmlspecialchars((string)$counts['approved_found_items']) ?></div>
-                    <span class="btn btn-primary">View Inventory</span>
+                    <div class="stat-label">Approved Items</div>
                 </a>
 
-                <!-- 3. Missing Item Reports -->
+                <!-- 3. Missing -->
                 <a href="missing-item-reports.php" class="stat-card">
-                    <h3>Missing Reports</h3>
+                    <span class="material-symbols-outlined stat-icon">search</span>
                     <div class="stat-number"><?= htmlspecialchars((string)$counts['missing_reports']) ?></div>
-                    <span class="btn btn-secondary">Manage Reports</span>
+                    <div class="stat-label">Missing Reports</div>
                 </a>
 
-                <!-- 4. Update Item Status (Tool) -->
-                <a href="#" class="stat-card" onclick="alert('To update a status, please navigate to a specific item in the Approved or Missing lists first!'); return false;">
-                    <h3>Update Status</h3>
-                    <div class="stat-number">⚙️</div>
-                    <span class="btn btn-primary">Action Tool</span>
+                <!-- 4. Update Status (Links to Approved Items list to pick an item) -->
+                <a href="approved-found-items.php" class="stat-card">
+                    <span class="material-symbols-outlined stat-icon">edit_square</span>
+                    <div class="stat-number">-</div>
+                    <div class="stat-label">Update Status</div>
                 </a>
 
-                <!-- 5. Archive Records -->
+                <!-- 5. Archive -->
                 <a href="archive-records.php" class="stat-card">
-                    <h3>Archive Records</h3>
+                    <span class="material-symbols-outlined stat-icon">inventory_2</span>
                     <div class="stat-number"><?= htmlspecialchars((string)$counts['archived_records']) ?></div>
-                    <span class="btn btn-secondary">View History</span>
+                    <div class="stat-label">Archived Records</div>
                 </a>
 
-                <!-- 6. User Management -->
+                <!-- 6. Users -->
                 <a href="user-management.php" class="stat-card">
-                    <h3>User Accounts</h3>
+                    <span class="material-symbols-outlined stat-icon">group</span>
                     <div class="stat-number"><?= htmlspecialchars((string)$totalUsers) ?></div>
-                    <span class="btn btn-primary">Manage Users</span>
+                    <div class="stat-label">Total Users</div>
                 </a>
 
             </div>

@@ -1,16 +1,41 @@
 <?php
-// views/admin/pending-found-items.php
-
-require_once __DIR__ . '/../../config/constants.php';
 require_once __DIR__ . '/../../config/session.php';
+require_once __DIR__ . '/../../config/constants.php';
 require_once __DIR__ . '/../../includes/functions.php';
 
-// 1. Check security
 requireAdmin();
 
-// 2. Get the data from the database (Using Lady's function)
-// Right now this returns an empty array [], but it will work automatically when she finishes her code.
-$pending_items = getPendingItems(); 
+// 1. Handle Form Submissions (Accept or Reject)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $itemId = filter_input(INPUT_POST, 'item_id', FILTER_VALIDATE_INT);
+    $action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
+    $adminId = $_SESSION['user_id'];
+
+    if ($itemId && $action) {
+        if ($action === 'accept') {
+            // Using the specific approve function from functions.php
+            if (approveItem($itemId, $adminId)) {
+                $_SESSION['success_message'] = 'Item successfully approved and published.';
+            } else {
+                $_SESSION['error_message'] = 'Failed to approve item.';
+            }
+        } elseif ($action === 'reject') {
+            // Using the general update function to mark it rejected
+            if (updateItemStatus('found_items', $itemId, STATUS_REJECTED, $adminId)) {
+                $_SESSION['success_message'] = 'Item report has been rejected.';
+            } else {
+                $_SESSION['error_message'] = 'Failed to reject item.';
+            }
+        }
+        
+        // Refresh the page to prevent duplicate form submissions
+        header('Location: pending-found-items.php');
+        exit;
+    }
+}
+
+// 2. Fetch pending items
+$pendingItems = getPendingItems(); 
 ?>
 
 <!DOCTYPE html>
@@ -18,64 +43,137 @@ $pending_items = getPendingItems();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pending Found Items - FEUreka</title>
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <title>Pending Found Items - FEUreka Admin</title>
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <!-- Custom Admin CSS -->
     <link rel="stylesheet" href="../../assets/css/admin.css">
 </head>
 <body>
+
     <div class="admin-layout">
         
-        <?php include __DIR__ . '/../../includes/admin-sidebar.php'; ?>
+        <!-- THE UNIFORM SIDEBAR -->
+        <?php 
+            // Pure PHP way to get the current file name (e.g., "user-management.php")
+            $currentPage = basename($_SERVER['PHP_SELF']); 
+        ?>
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2>FEUreka Admin</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="dashboard.php" class="<?= $currentPage === 'dashboard.php' ? 'active' : '' ?>">Dashboard</a></li>
+                    <li><a href="pending-found-items.php" class="<?= $currentPage === 'pending-found-items.php' ? 'active' : '' ?>">Pending Found Items</a></li>
+                    <li><a href="approved-found-items.php" class="<?= $currentPage === 'approved-found-items.php' ? 'active' : '' ?>">Approved Found Items</a></li>
+                    <li><a href="missing-item-reports.php" class="<?= $currentPage === 'missing-item-reports.php' ? 'active' : '' ?>">Missing Item Reports</a></li>
+                    <li><a href="archive-records.php" class="<?= $currentPage === 'archive-records.php' ? 'active' : '' ?>">Archive Records</a></li>
+                    <li><a href="user-management.php" class="<?= $currentPage === 'user-management.php' ? 'active' : '' ?>">User Management</a></li>
+                </ul>
+            </nav>
+        </aside>
 
+        <!-- MAIN CONTENT -->
         <main class="admin-content">
-            <header class="admin-header">
+            
+            <a href="dashboard.php" class="admin-back-btn">
+                <span class="material-symbols-outlined">arrow_back</span>
+                Back to Dashboard
+            </a>
+
+            <div class="admin-header">
                 <h1>Pending Found Items</h1>
-                <p>Review items submitted by users. Approve them to display them on the public feed.</p>
-            </header>
+                <p>Review items turned in by students. Approve them to display publicly or reject invalid reports.</p>
+            </div>
 
-            <table class="admin-table" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                <thead>
-                    <tr style="background-color: #f4f4f4; text-align: left;">
-                        <th style="padding: 10px; border-bottom: 2px solid #ccc;">Item Name</th>
-                        <th style="padding: 10px; border-bottom: 2px solid #ccc;">Location Found</th>
-                        <th style="padding: 10px; border-bottom: 2px solid #ccc;">Date Reported</th>
-                        <th style="padding: 10px; border-bottom: 2px solid #ccc;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    <?php if (empty($pending_items)): ?>
+            <!-- SUCCESS/ERROR MESSAGES -->
+            <?php if (isset($_SESSION['success_message'])): ?>
+                <div class="alert alert-success">
+                    <?= htmlspecialchars($_SESSION['success_message']) ?>
+                </div>
+                <?php unset($_SESSION['success_message']); ?>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['error_message'])): ?>
+                <div class="alert alert-danger">
+                    <?= htmlspecialchars($_SESSION['error_message']) ?>
+                </div>
+                <?php unset($_SESSION['error_message']); ?>
+            <?php endif; ?>
+
+            <!-- THE READABLE TABLE -->
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
                         <tr>
-                            <td colspan="4" style="padding: 20px; text-align: center;">No pending items at the moment.</td>
+                            <th>Item Details</th>
+                            <th>Category</th>
+                            <th>Location Found</th>
+                            <th>Finder</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
-                    <?php else: ?>
-                        <?php foreach ($pending_items as $item): ?>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($pendingItems)): ?>
                             <tr>
-                                <td style="padding: 10px; border-bottom: 1px solid #eee;"><?php echo htmlspecialchars($item['item_name']); ?></td>
-                                <td style="padding: 10px; border-bottom: 1px solid #eee;"><?php echo htmlspecialchars($item['location_description']); ?></td>
-                                <td style="padding: 10px; border-bottom: 1px solid #eee;"><?php echo htmlspecialchars($item['date_found']); ?></td>
-                                <td style="padding: 10px; border-bottom: 1px solid #eee;">
-                                    
-                                    <form action="../../actions/update-item-status.php" method="POST" style="display:inline;">
-                                        <input type="hidden" name="item_id" value="<?php echo $item['item_id']; ?>">
-                                        <input type="hidden" name="status" value="<?php echo STATUS_APPROVED; ?>">
-                                        <button type="submit" style="background-color: green; color: white; border: none; padding: 5px 10px; cursor: pointer;">Approve</button>
-                                    </form>
-
-                                    <form action="../../actions/update-item-status.php" method="POST" style="display:inline;">
-                                        <input type="hidden" name="item_id" value="<?php echo $item['item_id']; ?>">
-                                        <input type="hidden" name="status" value="<?php echo STATUS_REJECTED; ?>">
-                                        <button type="submit" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer;">Reject</button>
-                                    </form>
-
-                                </td>
+                                <td colspan="6" style="text-align: center; padding: 30px; color: #8BD2A6;">You're all caught up! No pending items to review.</td>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                        <?php else: ?>
+                            <?php foreach ($pendingItems as $item): ?>
+                                <tr>
+                                    <td>
+                                        <strong><?= htmlspecialchars($item['item_name']) ?></strong>
+                                        <br>
+                                        <small style="color: #8BD2A6;"><?= htmlspecialchars(date('M d, Y', strtotime($item['date_found']))) ?></small>
+                                    </td>
+                                    <td><?= htmlspecialchars($item['category_name']) ?></td>
+                                    <td>
+                                        <?= htmlspecialchars($item['room'] . ' / ' . $item['floor']) ?>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                            // Safely fetch reporter names using the correct database keys
+                                            $firstName = $item['reporter_first_name'] ?? 'Unknown';
+                                            $lastName = $item['reporter_last_name'] ?? '';
+                                            echo htmlspecialchars(trim($firstName . ' ' . $lastName));
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-warning">NEEDS REVIEW</span>
+                                    </td>
+                                    <td>
+                                        <!-- INLINE ACTION BUTTONS -->
+                                        <div style="display: flex; gap: 10px;">
+                                            <!-- Accept Form -->
+                                            <form action="pending-found-items.php" method="POST" style="margin: 0;">
+                                                <input type="hidden" name="item_id" value="<?= htmlspecialchars((string)$item['item_id']) ?>">
+                                                <input type="hidden" name="action" value="accept">
+                                                <button type="submit" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem; background-color: #90EE90;">
+                                                    Accept
+                                                </button>
+                                            </form>
 
-                </tbody>
-            </table>
+                                            <!-- Reject Form -->
+                                            <form action="pending-found-items.php" method="POST" style="margin: 0;">
+                                                <input type="hidden" name="item_id" value="<?= htmlspecialchars((string)$item['item_id']) ?>">
+                                                <input type="hidden" name="action" value="reject">
+                                                <button type="submit" class="btn" style="padding: 8px 16px; font-size: 0.85rem; background: rgba(255, 76, 76, 0.1); color: #ff4c4c; border: 1px solid #ff4c4c;">
+                                                    Reject
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+
         </main>
     </div>
+
 </body>
 </html>
