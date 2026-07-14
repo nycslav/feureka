@@ -1,21 +1,28 @@
 /*
 |--------------------------------------------------------------------------
-| FEUreka - Reporting Form Validation
+| FEUreka Reporting Validation
 |--------------------------------------------------------------------------
 |
-| Used by:
-| - report-found-item.php
-| - report-missing-item.php (future)
+| Shared validation for:
+| - Report Found Item
+| - Report Missing Item
 |
 */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const foundItemForm = document.getElementById("foundItemForm");
+    const foundForm = document.getElementById("foundItemForm");
+    const missingForm = document.getElementById("missingItemForm");
 
-    if (foundItemForm) {
+    if (foundForm) {
 
-        initializeFoundItemValidation(foundItemForm);
+        initializeFoundItem(foundForm);
+
+    }
+
+    if (missingForm) {
+
+        initializeMissingItem(missingForm);
 
     }
 
@@ -26,11 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
    INITIALIZE
 ========================================================== */
 
-function initializeFoundItemValidation(form) {
+function initializeFoundItem(form) {
+
+    attachLiveValidation(form);
 
     form.addEventListener("submit", function (event) {
 
-        if (!validateFoundItemForm()) {
+        if (!validateFoundItem()) {
 
             event.preventDefault();
 
@@ -38,39 +47,85 @@ function initializeFoundItemValidation(form) {
 
     });
 
-    attachLiveValidation();
+}
+
+function initializeMissingItem(form) {
+
+    attachLiveValidation(form);
+
+    form.addEventListener("submit", function (event) {
+
+        if (!validateMissingItem()) {
+
+            event.preventDefault();
+
+        }
+
+    });
 
 }
 
 
 /* ==========================================================
-   FORM VALIDATION
+   FOUND ITEM
 ========================================================== */
 
-function validateFoundItemForm() {
+function validateFoundItem() {
 
     let valid = true;
 
-    clearAllErrors();
+    clearAllErrors("foundItemForm");
 
     valid = validateRequired("category_id", "Please select a category.") && valid;
-
     valid = validateRequired("item_name", "Item name is required.") && valid;
-
     valid = validateRequired("item_description", "Description is required.") && valid;
-
     valid = validateRequired("room", "Room is required.") && valid;
-
     valid = validateRequired("floor", "Floor is required.") && valid;
-
     valid = validateRequired(
         "location_description",
         "Location description is required."
     ) && valid;
 
-    valid = validateDate("date_found") && valid;
+    valid = validateDate(
+        "date_found",
+        "Please select the date the item was found."
+    ) && valid;
 
-    valid = validateImage("image") && valid;
+    valid = validateImage("image", true) && valid;
+
+    return valid;
+
+}
+
+
+/* ==========================================================
+   MISSING ITEM
+========================================================== */
+
+function validateMissingItem() {
+
+    let valid = true;
+
+    clearAllErrors("missingItemForm");
+
+    valid = validateRequired("category_id", "Please select a category.") && valid;
+    valid = validateRequired("item_name", "Item name is required.") && valid;
+    valid = validateRequired("item_description", "Description is required.") && valid;
+    valid = validateRequired("room", "Room is required.") && valid;
+    valid = validateRequired("floor", "Floor is required.") && valid;
+    valid = validateRequired(
+        "location_description",
+        "Last known location is required."
+    ) && valid;
+
+    valid = validateDate(
+        "date_lost",
+        "Please select the date the item was lost."
+    ) && valid;
+
+    valid = validateContactNumber() && valid;
+
+    valid = validateImage("image", false) && valid;
 
     return valid;
 
@@ -81,15 +136,12 @@ function validateFoundItemForm() {
    LIVE VALIDATION
 ========================================================== */
 
-function attachLiveValidation() {
+function attachLiveValidation(form) {
 
-    document.querySelectorAll(
-        "#foundItemForm input, #foundItemForm textarea, #foundItemForm select"
-    ).forEach(input => {
+    form.querySelectorAll("input, textarea, select").forEach(input => {
 
         const eventType =
-            input.type === "file" ||
-            input.tagName === "SELECT"
+            input.type === "file" || input.tagName === "SELECT"
                 ? "change"
                 : "input";
 
@@ -105,12 +157,12 @@ function attachLiveValidation() {
 
 
 /* ==========================================================
-   REQUIRED FIELD
+   REQUIRED
 ========================================================== */
 
-function validateRequired(inputId, message) {
+function validateRequired(id, message) {
 
-    const input = document.getElementById(inputId);
+    const input = document.getElementById(id);
 
     if (!input || input.value.trim() === "") {
 
@@ -129,27 +181,58 @@ function validateRequired(inputId, message) {
    DATE
 ========================================================== */
 
-function validateDate(inputId) {
+function validateDate(id, message) {
 
-    const input = document.getElementById(inputId);
+    const input = document.getElementById(id);
 
     if (!input.value) {
 
-        showError(input, "Please select a date.");
+        showError(input, message);
 
         return false;
 
     }
 
-    const selectedDate = new Date(input.value);
+    const selected = new Date(input.value);
 
     const today = new Date();
 
-    today.setHours(0, 0, 0, 0);
+    today.setHours(0,0,0,0);
 
-    if (selectedDate > today) {
+    if (selected > today) {
 
-        showError(input, "Date cannot be in the future.");
+        showError(
+            input,
+            "Date cannot be in the future."
+        );
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+
+/* ==========================================================
+   CONTACT NUMBER
+========================================================== */
+
+function validateContactNumber() {
+
+    const input = document.getElementById("contact_number");
+
+    const value = input.value.trim();
+
+    const pattern = /^[0-9+\-\s()]{7,30}$/;
+
+    if (!pattern.test(value)) {
+
+        showError(
+            input,
+            "Please enter a valid contact number."
+        );
 
         return false;
 
@@ -164,42 +247,50 @@ function validateDate(inputId) {
    IMAGE
 ========================================================== */
 
-function validateImage(inputId) {
+function validateImage(id, required) {
 
-    const input = document.getElementById(inputId);
+    const input = document.getElementById(id);
 
     if (!input.files.length) {
 
-        showError(input, "Please upload an image.");
+        if (required) {
 
-        return false;
+            showError(
+                input,
+                "Please upload an image."
+            );
+
+            return false;
+
+        }
+
+        return true;
 
     }
 
     const file = input.files[0];
 
-    const allowedTypes = [
+    const allowed = [
 
         "image/jpeg",
         "image/png",
+        "image/gif",
         "image/webp"
 
     ];
 
-    if (!allowedTypes.includes(file.type)) {
+    if (!allowed.includes(file.type)) {
 
         showError(
             input,
-            "Only JPG, JPEG, PNG and WEBP are allowed."
+            "Only JPG, JPEG, PNG, GIF and WEBP files are allowed."
         );
 
         return false;
 
     }
 
-    const maxSize = 5 * 1024 * 1024;
-
-    if (file.size > maxSize) {
+    if (file.size > 5 * 1024 * 1024) {
 
         showError(
             input,
@@ -216,7 +307,7 @@ function validateImage(inputId) {
 
 
 /* ==========================================================
-   ERROR HELPERS
+   HELPERS
 ========================================================== */
 
 function showError(input, message) {
@@ -225,7 +316,8 @@ function showError(input, message) {
 
     input.style.borderColor = "#dc3545";
 
-    const error = input.parentElement.querySelector(".error-message");
+    const error =
+        input.parentElement.querySelector(".error-message");
 
     if (error) {
 
@@ -235,14 +327,14 @@ function showError(input, message) {
 
 }
 
-
 function clearError(input) {
 
     if (!input) return;
 
     input.style.borderColor = "";
 
-    const error = input.parentElement.querySelector(".error-message");
+    const error =
+        input.parentElement.querySelector(".error-message");
 
     if (error) {
 
@@ -252,18 +344,19 @@ function clearError(input) {
 
 }
 
+function clearAllErrors(formId) {
 
-function clearAllErrors() {
+    const form = document.getElementById(formId);
 
-    document.querySelectorAll(".error-message").forEach(error => {
+    if (!form) return;
+
+    form.querySelectorAll(".error-message").forEach(error => {
 
         error.textContent = "";
 
     });
 
-    document.querySelectorAll(
-        "#foundItemForm input, #foundItemForm textarea, #foundItemForm select"
-    ).forEach(input => {
+    form.querySelectorAll("input, textarea, select").forEach(input => {
 
         input.style.borderColor = "";
 
