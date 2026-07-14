@@ -1,119 +1,164 @@
 <?php declare(strict_types=1);
 
-/**
- * ============================================================================
- * FEUreka Login Page
- * ============================================================================
- *
- * Displays the login form for registered users and administrators.
- * Authentication requests are processed by:
- * actions/login-actions.php
- * ============================================================================
- */
+    /**
+     * ============================================================================
+     * FEUreka Login Page
+     * ============================================================================
+     *
+     * Displays the login form for registered users and administrators.
+     * Authentication requests are processed by:
+     * actions/login-actions.php
+     * ============================================================================
+     */
 
-require_once '../../config/session.php';
+    require_once '../../config/session.php';
 
-/*
-|--------------------------------------------------------------------------
-| Redirect authenticated users
-|--------------------------------------------------------------------------
-*/
+    /*
+    |--------------------------------------------------------------------------
+    | Redirect authenticated users
+    |--------------------------------------------------------------------------
+    */
 
-if (isLoggedIn()) {
+    if (isLoggedIn()) {
 
-    if (isAdmin()) {
-        header('Location: ../admin/dashboard.php');
-    } else {
-        header('Location: ../user/home.php');
+        if (isAdmin()) {
+            header('Location: ../admin/dashboard.php');
+        } else {
+            header('Location: ../user/home.php');
+        }
+
+        exit;
     }
 
-    exit;
-}
+    $pageTitle = 'Login | FEUreka';
+
+    require_once '../../includes/header.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<div class="auth-page">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | FEUreka</title>
-</head>
+    <div class="auth-card">
 
-<body>
+        <div class="auth-brand">
 
-    <h1>FEUreka</h1>
+            <img
+                src="../../assets/images/logo.png"
+                alt="FEUreka Logo"
+                class="auth-logo">
 
-    <h2>Login</h2>
+            <h1>Welcome Back</h1>
 
-    <?php if (isset($_SESSION['error'])): ?>
-
-        <p>
-            <?= htmlspecialchars($_SESSION['error']) ?>
-        </p>
-
-        <?php unset($_SESSION['error']); ?>
-
-    <?php endif; ?>
-
-    <?php if (isset($_SESSION['success'])): ?>
-
-        <p>
-            <?= htmlspecialchars($_SESSION['success']) ?>
-        </p>
-
-        <?php unset($_SESSION['success']); ?>
-
-    <?php endif; ?>
-
-    <form action="../../actions/login-actions.php" method="POST">
-
-        <div>
-
-            <label for="email">
-                Email
-            </label>
-
-            <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                autofocus
-            >
+            <p>
+                Sign in to continue to FEUreka.
+            </p>
 
         </div>
 
-        <br>
+        <?php if (isset($_SESSION['error'])): ?>
 
-        <div>
+            <div class="auth-message error">
 
-            <label for="password">
-                Password
-            </label>
+                <?= htmlspecialchars($_SESSION['error']) ?>
 
-            <input
-                type="password"
-                id="password"
-                name="password"
-                required
-            >
+            </div>
 
-        </div>
+            <?php unset($_SESSION['error']); ?>
 
-        <br>
+        <?php endif; ?>
 
-        <button type="submit">
-            Login
-        </button>
+        <?php if (isset($_SESSION['success'])): ?>
 
-    </form>
+            <div class="auth-message success">
 
-    <p>
-        Don't have an account?
-        <a href="register.php">Register here</a>
-    </p>
+                <?= htmlspecialchars($_SESSION['success']) ?>
+
+            </div>
+
+            <?php unset($_SESSION['success']); ?>
+
+        <?php endif; ?>
+
+        <form
+            class="auth-form"
+            action="../../actions/login-actions.php"
+            method="POST">
+
+            <div class="form-group">
+
+                <label for="email">
+
+                    Email
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="material-symbols-outlined input-icon">
+
+                        person
+
+                    </span>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        autofocus>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="password">
+
+                    Password
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="material-symbols-outlined input-icon">
+
+                        lock
+
+                    </span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        required>
+                </div>
+
+            </div>
+
+            <button
+                class="auth-button"
+                type="submit">
+
+                Login
+
+            </button>
+
+        </form>
+
+        <p class="auth-link">
+
+            Don't have an account?
+
+            <a href="register.php">
+
+                Register here
+
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
 
 </body>
-
 </html>
