@@ -53,6 +53,30 @@ require_once __DIR__ . '/../../includes/user-sidebar.php';
 
             </div>
 
+            <?php if (isset($_SESSION['success'])): ?>
+
+                <div class="auth-message success">
+
+                    <?= htmlspecialchars((string) $_SESSION['success']) ?>
+
+                </div>
+
+                <?php unset($_SESSION['success']); ?>
+
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['error'])): ?>
+
+                <div class="auth-message error">
+
+                    <?= htmlspecialchars((string) $_SESSION['error']) ?>
+
+                </div>
+
+                <?php unset($_SESSION['error']); ?>
+
+            <?php endif; ?>
+
             <div class="report-card">
 
                 <form
