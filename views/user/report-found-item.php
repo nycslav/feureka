@@ -10,17 +10,7 @@ require_once '../../includes/functions.php';
 |--------------------------------------------------------------------------
 */
 
-$categories = [];
-
-$result = $conn->query("
-    SELECT category_id, category_name
-    FROM categories
-    ORDER BY category_name ASC
-");
-
-if ($result) {
-    $categories = $result->fetch_all(MYSQLI_ASSOC);
-}
+$categories = getCategories();
 
 $pageTitle = 'Report Found Item | FEUreka';
 

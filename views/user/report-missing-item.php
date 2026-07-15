@@ -16,19 +16,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $categories = [];
-
-    $result = $conn->query("
-        SELECT category_id, category_name
-        FROM categories
-        ORDER BY category_name ASC
-    ");
-
-    if ($result) {
-
-        $categories = $result->fetch_all(MYSQLI_ASSOC);
-
-    }
+$categories = getCategories();
 ?>
 
 <main>
