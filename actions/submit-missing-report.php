@@ -75,7 +75,7 @@ if (
  * DATE VALIDATION
  * ========================================================================== */
 
-$dateObject = DateTimeImmutable::createFromFormat('Y-m-d', $dateLost);
+$dateObject = DateTimeImmutable::createFromFormat('!Y-m-d', $dateLost);
 $dateErrors = DateTimeImmutable::getLastErrors();
 
 if (

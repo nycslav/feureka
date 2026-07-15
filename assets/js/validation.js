@@ -197,7 +197,9 @@ function validateDate(id, message) {
 
     }
 
-    const selected = new Date(input.value);
+    const [year, month, day] = input.value.split("-").map(Number);
+
+    const selected = new Date(year, month - 1, day);
 
     const today = new Date();
 

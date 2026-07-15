@@ -54,7 +54,7 @@ if (
     exit;
 }
 
-$dateObject = DateTimeImmutable::createFromFormat('Y-m-d', $dateFound);
+$dateObject = DateTimeImmutable::createFromFormat('!Y-m-d', $dateFound);
 $dateErrors = DateTimeImmutable::getLastErrors();
 
 if (
