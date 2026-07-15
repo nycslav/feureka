@@ -292,6 +292,55 @@ function feurekaValidStatusForTable(string $table, string $status): bool
     return false;
 }
 
+function feurekaCurrentRecordStatus(string $table, int $recordId): ?string
+{
+    if ($table === 'found_items') {
+        $record = feurekaFetchOne(
+            'SELECT status FROM found_items WHERE item_id = ? LIMIT 1',
+            'i',
+            [$recordId]
+        );
+
+        return isset($record['status']) ? (string) $record['status'] : null;
+    }
+
+    if ($table === 'missing_reports') {
+        $record = feurekaFetchOne(
+            'SELECT status FROM missing_reports WHERE report_id = ? LIMIT 1',
+            'i',
+            [$recordId]
+        );
+
+        return isset($record['status']) ? (string) $record['status'] : null;
+    }
+
+    return null;
+}
+
+function feurekaValidWorkflowTransition(string $table, string $currentStatus, string $nextStatus): bool
+{
+    if ($currentStatus === $nextStatus) {
+        return true;
+    }
+
+    // Only documented status transitions are allowed.
+    $transitions = [
+        'found_items' => [
+            STATUS_PENDING => [STATUS_APPROVED, STATUS_REJECTED],
+            STATUS_APPROVED => [STATUS_UNDER_REVIEW],
+            STATUS_UNDER_REVIEW => [STATUS_CLAIMED],
+            STATUS_CLAIMED => [STATUS_ARCHIVED],
+        ],
+        'missing_reports' => [
+            STATUS_OPEN => [STATUS_POSSIBLE_MATCH],
+            STATUS_POSSIBLE_MATCH => [STATUS_RESOLVED],
+            STATUS_RESOLVED => [STATUS_ARCHIVED],
+        ],
+    ];
+
+    return in_array($nextStatus, $transitions[$table][$currentStatus] ?? [], true);
+}
+
 
 /* ============================================================================
  * AUTHENTICATION
@@ -576,6 +625,22 @@ function getUsers(): array
             first_name ASC',
         's',
         [ROLE_ADMIN]
+    );
+}
+
+/**
+ * Retrieve all item categories.
+ *
+ * @return array
+ */
+function getCategories(): array
+{
+    return feurekaFetchAll(
+        'SELECT
+            category_id,
+            category_name
+        FROM categories
+        ORDER BY category_name ASC'
     );
 }
 
@@ -915,6 +980,15 @@ function updateItemStatus(
         || $adminId <= 0
         || !feurekaValidStatusForTable($table, $status)
         || !feurekaIsAdminUser($adminId)
+    ) {
+        return false;
+    }
+
+    $currentStatus = feurekaCurrentRecordStatus($table, $recordId);
+
+    if (
+        $currentStatus === null
+        || !feurekaValidWorkflowTransition($table, $currentStatus, $status)
     ) {
         return false;
     }
