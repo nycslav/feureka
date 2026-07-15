@@ -176,8 +176,14 @@ if (
         $extension
     );
 
-    if (!is_dir(UPLOAD_DIRECTORY)) {
-        mkdir(UPLOAD_DIRECTORY, 0775, true);
+    if (
+        !is_dir(UPLOAD_DIRECTORY)
+        && !mkdir(UPLOAD_DIRECTORY, 0775, true)
+        && !is_dir(UPLOAD_DIRECTORY)
+    ) {
+        $_SESSION['error'] = 'Unable to prepare the upload directory.';
+        header('Location: ../views/user/report-missing-item.php');
+        exit;
     }
 
     $destination = rtrim(
