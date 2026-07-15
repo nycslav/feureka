@@ -1,5 +1,6 @@
 <article
-    class="item-card"
+    class="item-card open-modal-btn"
+    data-modal="item-modal-<?= (int)$item['item_id']; ?>"
     data-name="<?= htmlspecialchars(strtolower($item['item_name'])) ?>"
     data-category="<?= htmlspecialchars(strtolower($item['category_name'])) ?>">
 
@@ -75,6 +76,12 @@
             class="btn btn-primary item-button open-modal-btn"
             type="button"
             data-modal="item-modal-<?= (int)$item['item_id']; ?>">
+
+            <span class="material-symbols-outlined">
+
+                visibility
+
+            </span>
 
             View Details
 
