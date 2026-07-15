@@ -18,6 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+/*
+|--------------------------------------------------------------------------
+| Remove expired student accounts before authentication
+|--------------------------------------------------------------------------
+*/
+
+deleteExpiredUsers();
+
 $email = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
 

@@ -91,7 +91,7 @@ function validateFoundItem() {
         "Please select the date the item was found."
     ) && valid;
 
-    valid = validateImage("image", true) && valid;
+    valid = validateImage("image", false) && valid;
 
     return valid;
 

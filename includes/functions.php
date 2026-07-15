@@ -767,6 +767,86 @@ function filterItems(int $categoryId): array
     );
 }
 
+/**
+ * Search approved found items and optionally narrow the results by category.
+ *
+ * @param string|null $keyword Search keyword for approved found item details.
+ * @param int|null $categoryId Category ID used to narrow matching results.
+ * @return array
+ */
+function searchAndFilterItems(?string $keyword = null, ?int $categoryId = null): array
+{
+    $keyword = $keyword === null ? '' : trim($keyword);
+    $categoryId = ($categoryId !== null && $categoryId > 0) ? $categoryId : null;
+
+    if ($keyword === '' && $categoryId === null) {
+        return getApprovedItems();
+    }
+
+    if ($keyword === '') {
+        return filterItems($categoryId);
+    }
+
+    if ($categoryId === null) {
+        return searchItems($keyword);
+    }
+
+    $searchTerm = sprintf('%%%s%%', $keyword);
+
+    return feurekaFetchAll(
+        'SELECT
+            fi.item_id,
+            fi.user_id,
+            fi.category_id,
+            c.category_name,
+            fi.item_name,
+            fi.item_description,
+            fi.room,
+            fi.floor,
+            fi.location_description,
+            fi.date_found,
+            fi.status,
+            fi.image,
+            fi.created_at,
+            fi.updated_at,
+            fi.processed_by,
+            fi.admin_notes,
+            reporter.first_name AS reporter_first_name,
+            reporter.last_name AS reporter_last_name,
+            reporter.email AS reporter_email,
+            reporter.user_type AS reporter_user_type,
+            admin.first_name AS processed_by_first_name,
+            admin.last_name AS processed_by_last_name,
+            admin.email AS processed_by_email
+        FROM found_items AS fi
+        INNER JOIN categories AS c ON c.category_id = fi.category_id
+        LEFT JOIN users AS reporter ON reporter.user_id = fi.user_id
+        LEFT JOIN users AS admin ON admin.user_id = fi.processed_by
+        WHERE fi.status = ?
+            AND fi.category_id = ?
+            AND (
+                fi.item_name LIKE ?
+                OR fi.item_description LIKE ?
+                OR fi.room LIKE ?
+                OR fi.floor LIKE ?
+                OR fi.location_description LIKE ?
+                OR c.category_name LIKE ?
+            )
+        ORDER BY fi.date_found DESC, fi.created_at DESC',
+        'sissssss',
+        [
+            STATUS_APPROVED,
+            $categoryId,
+            $searchTerm,
+            $searchTerm,
+            $searchTerm,
+            $searchTerm,
+            $searchTerm,
+            $searchTerm,
+        ]
+    );
+}
+
 
 /* ============================================================================
  * ITEM REPORTING

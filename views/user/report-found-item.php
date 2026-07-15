@@ -53,6 +53,30 @@ require_once __DIR__ . '/../../includes/user-sidebar.php';
 
             </div>
 
+            <?php if (isset($_SESSION['success'])): ?>
+
+                <div class="auth-message success">
+
+                    <?= htmlspecialchars((string) $_SESSION['success']) ?>
+
+                </div>
+
+                <?php unset($_SESSION['success']); ?>
+
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['error'])): ?>
+
+                <div class="auth-message error">
+
+                    <?= htmlspecialchars((string) $_SESSION['error']) ?>
+
+                </div>
+
+                <?php unset($_SESSION['error']); ?>
+
+            <?php endif; ?>
+
             <div class="report-card">
 
                 <form
@@ -349,13 +373,13 @@ require_once __DIR__ . '/../../includes/user-sidebar.php';
 
                                     <span class="upload-title">
 
-                                        Upload Item Photo
+                                        Optional Item Photo
 
                                     </span>
 
                                     <span class="upload-subtitle">
 
-                                        Click to browse your device
+                                        Optional - Click to browse your device
 
                                     </span>
 
@@ -393,7 +417,6 @@ require_once __DIR__ . '/../../includes/user-sidebar.php';
                                 id="image"
                                 name="image"
                                 accept=".jpg,.jpeg,.png,.webp"
-                                required
                                 hidden>
 
                             <small class="error-message"></small>
