@@ -27,6 +27,18 @@
         <!-- Left Section -->
         <div class="navbar-left">
 
+            <button
+                id="menu-toggle"
+                class="navbar-menu-button"
+                type="button"
+                aria-label="Open Navigation">
+
+                <span class="material-symbols-outlined">
+                    menu
+                </span>
+
+            </button>
+
             <a href="home.php" class="navbar-logo">
 
                 <img
