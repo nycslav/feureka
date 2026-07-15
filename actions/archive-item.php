@@ -10,7 +10,7 @@ require_once __DIR__ . '/../includes/functions.php';
 $_SESSION['user_id'] = 1;
 
 // 2. The Bouncer
-// requireAdmin(); // (Keep commented out until your login system is built)
+requireAdmin();
 
 // 3. Process the POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

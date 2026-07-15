@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../../config/session.php';
 // TODO:
 // Uncomment after authentication integration.
-// requireLogin();
+requireLogin();
 
 require_once __DIR__ . '/../../includes/functions.php';
 require_once __DIR__ . '/../../includes/header.php';
