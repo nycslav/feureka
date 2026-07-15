@@ -30,16 +30,6 @@
 
         </div>
 
-        <div class="footer-links">
-
-            <a href="#">FEU Tech</a>
-
-            <a href="#">Contact Info</a>
-
-            <a href="#">Privacy Policy</a>
-
-        </div>
-
         <div class="footer-copyright">
 
             © <?= date('Y') ?> FEUreka Lost and Found Management System
