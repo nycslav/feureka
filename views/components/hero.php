@@ -32,13 +32,17 @@
 
             <div class="hero-actions">
 
+                <div class="hero-actions">
+
                 <a href="report-missing-item.php" class="btn btn-primary">
                     Report Missing Item
                 </a>
 
-                <a href="#found-items" class="btn btn-secondary">
-                    Browse Found Items
+                <a href="report-found-item.php" class="btn btn-secondary">
+                    Report Found Item
                 </a>
+
+            </div>
 
             </div>
 
