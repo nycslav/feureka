@@ -28,15 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $success = archiveItem($table, $itemId);
 
         if ($success) {
-            $_SESSION['success_msg'] = "Item successfully moved to the archive.";
+            $_SESSION['success_message'] = "Item successfully moved to the archive.";
         } else {
-            $_SESSION['error_msg'] = "Failed to archive the item. It may have already been moved.";
+            $_SESSION['error_message'] = "Failed to archive the item. It may have already been moved.";
         }
     } else {
-        $_SESSION['error_msg'] = "Invalid data submitted.";
+        $_SESSION['error_message'] = "Invalid data submitted.";
     }
 
-    // 4. Smart Redirect
+    // 4. Smart Redirect    
     // Send the admin back to the page they just came from
     if ($table === 'missing_reports') {
         header("Location: ../views/admin/missing-item-reports.php");
