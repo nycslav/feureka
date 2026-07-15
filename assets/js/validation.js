@@ -39,7 +39,9 @@ function initializeFoundItem(form) {
 
     form.addEventListener("submit", function (event) {
 
-        if (!validateFoundItem()) {
+        const valid = validateFoundItem();
+
+        if (!valid) {
 
             event.preventDefault();
 
@@ -55,7 +57,9 @@ function initializeMissingItem(form) {
 
     form.addEventListener("submit", function (event) {
 
-        if (!validateMissingItem()) {
+        const valid = validateMissingItem();
+
+        if (!valid) {
 
             event.preventDefault();
 
@@ -317,7 +321,7 @@ function showError(input, message) {
     input.style.borderColor = "#dc3545";
 
     const error =
-        input.parentElement.querySelector(".error-message");
+    input.closest(".form-group")?.querySelector(".error-message");
 
     if (error) {
 
@@ -334,7 +338,7 @@ function clearError(input) {
     input.style.borderColor = "";
 
     const error =
-        input.parentElement.querySelector(".error-message");
+    input.closest(".form-group")?.querySelector(".error-message");
 
     if (error) {
 

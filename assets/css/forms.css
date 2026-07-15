@@ -1243,3 +1243,19 @@ input[type="file"]{
     font-size:42px;
 
 }
+
+.error-message{
+
+    display:block;
+
+    margin-top:8px;
+
+    color:#FF6B6B;
+
+    font-size:.85rem;
+
+    font-weight:500;
+
+    min-height:18px;
+
+}
