@@ -54,6 +54,14 @@ usort($archivedRecords, function($a, $b) {
                     <li><a href="user-management.php" class="<?= $currentPage === 'user-management.php' ? 'active' : '' ?>">User Management</a></li>
                 </ul>
             </nav>
+            <!-- NEW: LOGOUT BUTTON PINNED TO BOTTOM -->
+            <!-- GLOWING RED LOGOUT BUTTON PINNED TO BOTTOM -->
+            <div class="sidebar-logout">
+                <a href="../../actions/logout-actions.php">
+                    <span class="material-symbols-outlined">logout</span>
+                    Log Out
+                </a>
+            </div>
         </aside>
 
         <!-- MAIN CONTENT -->

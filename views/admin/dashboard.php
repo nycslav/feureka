@@ -39,12 +39,20 @@ $totalUsers = count($users);
                 <ul>
                     <li><a href="dashboard.php" class="<?= $currentPage === 'dashboard.php' ? 'active' : '' ?>">Dashboard</a></li>
                     <li><a href="pending-found-items.php" class="<?= $currentPage === 'pending-found-items.php' ? 'active' : '' ?>">Pending Found Items</a></li>
-                    <li><a href="approved-found-items.php" class="<?= $currentPage === 'approved-found-items.php' ? 'active' : '' ?>">Approved Found Items</a></li>
+                    <li><a href="approved-found-items.php" class="<?= $currentPage === 'approved-found-items.php' ? 'active' : '' ?>">Active Found Items</a></li>
                     <li><a href="missing-item-reports.php" class="<?= $currentPage === 'missing-item-reports.php' ? 'active' : '' ?>">Missing Item Reports</a></li>
                     <li><a href="archive-records.php" class="<?= $currentPage === 'archive-records.php' ? 'active' : '' ?>">Archive Records</a></li>
                     <li><a href="user-management.php" class="<?= $currentPage === 'user-management.php' ? 'active' : '' ?>">User Management</a></li>
                 </ul>
             </nav>
+            <!-- NEW: LOGOUT BUTTON PINNED TO BOTTOM -->
+            <!-- GLOWING RED LOGOUT BUTTON PINNED TO BOTTOM -->
+            <div class="sidebar-logout">
+                <a href="../../actions/logout-actions.php">
+                    <span class="material-symbols-outlined">logout</span>
+                    Log Out
+                </a>
+            </div>
         </aside>
 
         <!-- MAIN CONTENT -->
@@ -68,7 +76,7 @@ $totalUsers = count($users);
                 <a href="approved-found-items.php" class="stat-card">
                     <span class="material-symbols-outlined stat-icon">check_circle</span>
                     <div class="stat-number"><?= htmlspecialchars((string)$counts['approved_found_items']) ?></div>
-                    <div class="stat-label">Approved Items</div>
+                    <div class="stat-label">Active Items</div>
                 </a>
 
                 <!-- 3. Missing -->
