@@ -74,16 +74,18 @@
 
                 </button>
 
-                <button
+                <a
+                    href="profile.php"
                     class="navbar-icon-button"
-                    type="button"
                     aria-label="Profile">
 
                     <span class="material-symbols-outlined">
+
                         person
+
                     </span>
 
-                </button>
+                </a>
 
             </div>
 
