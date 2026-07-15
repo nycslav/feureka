@@ -63,17 +63,6 @@
             <!-- Authenticated User Actions -->
             <div class="navbar-user-actions">
 
-                <button
-                    class="navbar-icon-button"
-                    type="button"
-                    aria-label="Notifications">
-
-                    <span class="material-symbols-outlined">
-                        notifications
-                    </span>
-
-                </button>
-
                 <a
                     href="profile.php"
                     class="navbar-icon-button"
