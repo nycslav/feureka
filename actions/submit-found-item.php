@@ -5,8 +5,10 @@
  * FEUreka Submit Found Item Action
  * ============================================================================
  *
- * Processes the Report Found Item form, validates the uploaded image,
- * prepares the item data, and submits it through the shared helper function.
+ * Processes the Report Found Item form.
+
+ * If an image is provided, it is validated and uploaded.
+ * Otherwise, the report is submitted without an image.
  * ============================================================================
  */
 
@@ -71,69 +73,72 @@ if ($dateObject > $today) {
     exit;
 }
 
-if (!isset($_FILES['image']) || !is_array($_FILES['image'])) {
-    $_SESSION['error'] = 'Please upload an image.';
-    header('Location: ../views/user/report-found-item.php');
-    exit;
+$imagePath = null;
+$destinationPath = null;
+
+if (
+    isset($_FILES['image'])
+    && is_array($_FILES['image'])
+    && ($_FILES['image']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE
+) {
+    $imageFile = $_FILES['image'];
+
+    if (($imageFile['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        $_SESSION['error'] = 'There was a problem uploading the image.';
+        header('Location: ../views/user/report-found-item.php');
+        exit;
+    }
+
+    if (($imageFile['size'] ?? 0) > MAX_IMAGE_SIZE) {
+        $_SESSION['error'] = 'Image size must not exceed 5 MB.';
+        header('Location: ../views/user/report-found-item.php');
+        exit;
+    }
+
+    $allowedMimeTypes = ALLOWED_IMAGE_TYPES;
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $detectedMimeType = $finfo->file($imageFile['tmp_name'] ?? '');
+
+    if ($detectedMimeType === false || !in_array($detectedMimeType, $allowedMimeTypes, true)) {
+        $_SESSION['error'] = 'Only JPG, JPEG, PNG, GIF, and WEBP files are allowed.';
+        header('Location: ../views/user/report-found-item.php');
+        exit;
+    }
+
+    $originalName = pathinfo((string) ($imageFile['name'] ?? 'uploaded-image'), PATHINFO_FILENAME);
+    $sanitizedName = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '-', $originalName) ?? 'uploaded-image');
+    $sanitizedName = trim($sanitizedName, '-');
+
+    if ($sanitizedName === '') {
+        $sanitizedName = 'found-item';
+    }
+
+    $extension = match ($detectedMimeType) {
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/gif' => 'gif',
+        'image/webp' => 'webp',
+        default => 'jpg',
+    };
+
+    $timestamp = date('Ymd-His');
+    $fileName = sprintf('%s-%s.%s', $sanitizedName, $timestamp, $extension);
+    $destinationPath = rtrim(UPLOAD_DIRECTORY, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fileName;
+
+    if (!is_dir(UPLOAD_DIRECTORY) && !mkdir(UPLOAD_DIRECTORY, 0775, true) && !is_dir(UPLOAD_DIRECTORY)) {
+        $_SESSION['error'] = 'Unable to prepare the upload directory.';
+        header('Location: ../views/user/report-found-item.php');
+        exit;
+    }
+
+    if (!move_uploaded_file($imageFile['tmp_name'], $destinationPath)) {
+        $_SESSION['error'] = 'Unable to save the uploaded image.';
+        header('Location: ../views/user/report-found-item.php');
+        exit;
+    }
+
+    $imagePath = 'assets/uploads/' . $fileName;
 }
-
-$imageFile = $_FILES['image'];
-
-if (($imageFile['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
-    $_SESSION['error'] = 'There was a problem uploading the image.';
-    header('Location: ../views/user/report-found-item.php');
-    exit;
-}
-
-if (($imageFile['size'] ?? 0) > MAX_IMAGE_SIZE) {
-    $_SESSION['error'] = 'Image size must not exceed 5 MB.';
-    header('Location: ../views/user/report-found-item.php');
-    exit;
-}
-
-$allowedMimeTypes = ALLOWED_IMAGE_TYPES;
-$finfo = new finfo(FILEINFO_MIME_TYPE);
-$detectedMimeType = $finfo->file($imageFile['tmp_name'] ?? '');
-
-if ($detectedMimeType === false || !in_array($detectedMimeType, $allowedMimeTypes, true)) {
-    $_SESSION['error'] = 'Only JPG, JPEG, PNG, GIF, and WEBP files are allowed.';
-    header('Location: ../views/user/report-found-item.php');
-    exit;
-}
-
-$originalName = pathinfo((string) ($imageFile['name'] ?? 'uploaded-image'), PATHINFO_FILENAME);
-$sanitizedName = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '-', $originalName) ?? 'uploaded-image');
-$sanitizedName = trim($sanitizedName, '-');
-
-if ($sanitizedName === '') {
-    $sanitizedName = 'found-item';
-}
-
-$extension = match ($detectedMimeType) {
-    'image/jpeg' => 'jpg',
-    'image/png' => 'png',
-    'image/gif' => 'gif',
-    'image/webp' => 'webp',
-    default => 'jpg',
-};
-
-$timestamp = date('Ymd-His');
-$fileName = sprintf('%s-%s.%s', $sanitizedName, $timestamp, $extension);
-$destinationPath = rtrim(UPLOAD_DIRECTORY, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fileName;
-
-if (!is_dir(UPLOAD_DIRECTORY) && !mkdir(UPLOAD_DIRECTORY, 0775, true) && !is_dir(UPLOAD_DIRECTORY)) {
-    $_SESSION['error'] = 'Unable to prepare the upload directory.';
-    header('Location: ../views/user/report-found-item.php');
-    exit;
-}
-
-if (!move_uploaded_file($imageFile['tmp_name'], $destinationPath)) {
-    $_SESSION['error'] = 'Unable to save the uploaded image.';
-    header('Location: ../views/user/report-found-item.php');
-    exit;
-}
-
-$imagePath = 'assets/uploads/' . $fileName;
 
 $itemData = [
     'user_id' => $userId,
@@ -149,7 +154,7 @@ $itemData = [
 
 
 if (!submitFoundItem($itemData)) {
-    if (is_file($destinationPath)) {
+    if ($destinationPath !== null && is_file($destinationPath)) {
         @unlink($destinationPath);
     }
 

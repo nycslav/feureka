@@ -349,13 +349,13 @@ require_once __DIR__ . '/../../includes/user-sidebar.php';
 
                                     <span class="upload-title">
 
-                                        Upload Item Photo
+                                        Optional Item Photo
 
                                     </span>
 
                                     <span class="upload-subtitle">
 
-                                        Click to browse your device
+                                        Optional - Click to browse your device
 
                                     </span>
 
@@ -393,7 +393,6 @@ require_once __DIR__ . '/../../includes/user-sidebar.php';
                                 id="image"
                                 name="image"
                                 accept=".jpg,.jpeg,.png,.webp"
-                                required
                                 hidden>
 
                             <small class="error-message"></small>
