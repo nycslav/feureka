@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../config/constants.php';
 require_once __DIR__ . '/../../includes/functions.php';
@@ -9,7 +10,11 @@ requireAdmin();
 // 1. Handle Form Submissions (Accept or Reject)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $itemId = filter_input(INPUT_POST, 'item_id', FILTER_VALIDATE_INT);
-    $action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
+    
+    // FIX: Replaced deprecated FILTER_SANITIZE_STRING
+    // Using trim() with null coalescing is perfect for exact string matching like 'accept'/'reject'
+    $action = trim($_POST['action'] ?? '');
+    
     $adminId = $_SESSION['user_id'];
 
     if ($itemId && $action) {

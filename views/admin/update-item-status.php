@@ -11,10 +11,13 @@ requireAdmin();
 
 // 1. Handle Form Submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $table = filter_input(INPUT_POST, 'table', FILTER_SANITIZE_STRING);
+    // FIX: Replaced deprecated FILTER_SANITIZE_STRING
+    $table = trim($_POST['table'] ?? '');
     $recordId = filter_input(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
-    $status = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_STRING);
-    $notes = filter_input(INPUT_POST, 'admin_notes', FILTER_SANITIZE_STRING) ?: null;
+    $status = trim($_POST['status'] ?? '');
+    
+    // Notes might contain special characters, so we use the proper full special chars filter
+    $notes = filter_input(INPUT_POST, 'admin_notes', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: null;
     $adminId = $_SESSION['user_id'];
 
     if ($table && $recordId && $status) {
@@ -32,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // 2. Handle Page Load
-$table = filter_input(INPUT_GET, 'table', FILTER_SANITIZE_STRING) ?? filter_input(INPUT_POST, 'table', FILTER_SANITIZE_STRING);
+// FIX: Replaced deprecated FILTER_SANITIZE_STRING
+$table = trim($_GET['table'] ?? $_POST['table'] ?? '');
 $recordId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?? filter_input(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
 
 if (!$table || !$recordId) {
