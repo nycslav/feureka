@@ -77,7 +77,23 @@ if (!file_exists($filePath)) {
 
             <p>
 
-                <strong>Location:</strong>
+                <strong>Room:</strong>
+
+                <?= htmlspecialchars((string) ($item['room'] ?? '')); ?>
+
+            </p>
+
+            <p>
+
+                <strong>Floor:</strong>
+
+                <?= htmlspecialchars((string) ($item['floor'] ?? '')); ?>
+
+            </p>
+
+            <p>
+
+                <strong>Specific Location:</strong>
 
                 <?= htmlspecialchars($item['location_description']); ?>
 
