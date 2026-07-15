@@ -100,11 +100,22 @@ if ($dateObject > $today) {
  * CONTACT NUMBER VALIDATION
  * ========================================================================== */
 
-if (!preg_match('/^[0-9+\-\s()]{7,30}$/', $contactNumber)) {
+// Remove everything except digits
+$contactNumber = preg_replace('/\D/', '', $contactNumber);
+
+// Validate Philippine mobile number
+if (!preg_match('/^09\d{9}$/', $contactNumber)) {
     $_SESSION['error'] = 'Please enter a valid contact number.';
     header('Location: ../views/user/report-missing-item.php');
     exit;
 }
+
+// Format as 0917-123-4567
+$contactNumber = substr($contactNumber, 0, 4)
+    . '-'
+    . substr($contactNumber, 4, 3)
+    . '-'
+    . substr($contactNumber, 7, 4);
 
 /* ============================================================================
  * OPTIONAL IMAGE UPLOAD
