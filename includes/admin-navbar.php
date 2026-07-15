@@ -39,7 +39,7 @@
 
             </button>
 
-            <a href="home.php" class="navbar-logo">
+            <a href="dashboard.php" class="navbar-logo">
 
                 <img
                     src="../../assets/images/logo.png"

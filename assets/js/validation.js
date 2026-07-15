@@ -45,6 +45,8 @@ function initializeFoundItem(form) {
 
             event.preventDefault();
 
+            scrollToFirstError("foundItemForm");
+
         }
 
     });
@@ -62,6 +64,8 @@ function initializeMissingItem(form) {
         if (!valid) {
 
             event.preventDefault();
+
+            scrollToFirstError("missingItemForm");
 
         }
 
@@ -343,6 +347,37 @@ function clearError(input) {
     if (error) {
 
         error.textContent = "";
+
+    }
+
+}
+
+function scrollToFirstError(formId) {
+
+    const form = document.getElementById(formId);
+
+    if (!form) return;
+
+    const firstError = form.querySelector(".error-message:not(:empty)");
+
+    if (!firstError) return;
+
+    const group = firstError.closest(".form-group");
+
+    if (!group) return;
+
+    group.scrollIntoView({
+
+        behavior: "smooth",
+        block: "center"
+
+    });
+
+    const input = group.querySelector("input, textarea, select");
+
+    if (input) {
+
+        input.focus();
 
     }
 
