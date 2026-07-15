@@ -1,27 +1,27 @@
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded", () => {
 
-    const menu=document.getElementById("menu-toggle");
+    const menu = document.getElementById("menu-toggle");
 
-    const overlay=document.getElementById("sidebar-overlay");
+    const overlay = document.getElementById("sidebar-overlay");
 
-    if(menu){
+    if (menu && overlay) {
 
-        menu.addEventListener("click",()=>{
+        menu.addEventListener("click", () => {
 
             overlay.classList.add("active");
 
         });
 
+        overlay.addEventListener("click", (e) => {
+
+            if (e.target === overlay) {
+
+                overlay.classList.remove("active");
+
+            }
+
+        });
+
     }
-
-    overlay.addEventListener("click",(e)=>{
-
-        if(e.target===overlay){
-
-            overlay.classList.remove("active");
-
-        }
-
-    });
 
 });

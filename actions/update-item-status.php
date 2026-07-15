@@ -5,7 +5,11 @@ require_once __DIR__ . '/../config/constants.php';
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../includes/functions.php';
 
+<<<<<<< HEAD
+// 2. Security Check: Instantly boot anyone who isn't a logged-in admin
+=======
 // 1. RESTORE AUTHORIZATION: Unleash the bouncer
+>>>>>>> origin/feature/admin
 requireAdmin();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -47,152 +47,372 @@ $stmt->close();
 if (!$user) {
     exit('User not found.');
 }
+
+$fullName = trim($user['first_name'] . ' ' . $user['last_name']);
+
+$initials = strtoupper(
+    mb_substr($user['first_name'], 0, 1) . mb_substr($user['last_name'], 0, 1)
+);
+
+$roleLabel = ucwords(str_replace('_', ' ', (string) $user['user_type']));
+
+$pageTitle = 'My Profile | FEUreka';
+
+require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/navbar.php';
+require_once __DIR__ . '/../../includes/user-sidebar.php';
+
 ?>
+<main>
 
-<!DOCTYPE html>
-<html lang="en">
+    <section class="report-section">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile | FEUreka</title>
-</head>
+        <div class="container">
 
-<body>
+            <div class="report-header">
 
-<h1>My Profile</h1>
+                <h1 class="page-title">
 
-<?php if (isset($_SESSION['success'])): ?>
+                    My Profile
 
-    <p>
-        <?= htmlspecialchars($_SESSION['success']) ?>
-    </p>
+                </h1>
 
-    <?php unset($_SESSION['success']); ?>
+                <p class="page-description">
 
-<?php endif; ?>
+                    Manage your personal account information and review your account details.
 
-<?php if (isset($_SESSION['error'])): ?>
+                </p>
 
-    <p>
-        <?= htmlspecialchars($_SESSION['error']) ?>
-    </p>
+            </div>
 
-    <?php unset($_SESSION['error']); ?>
+            <div class="report-card">
 
-<?php endif; ?>
+                <div class="profile-header">
 
-<form action="../../actions/update-profile.php" method="POST">
+                    <div class="profile-avatar">
 
-    <div>
+                        <?= htmlspecialchars($initials) ?>
 
-        <label for="first_name">First Name</label>
+                    </div>
 
-        <input
-            type="text"
-            id="first_name"
-            name="first_name"
-            value="<?= htmlspecialchars($user['first_name']) ?>"
-            required
-        >
+                    <div class="profile-header-info">
 
-    </div>
+                        <h2 class="profile-name">
 
-    <br>
+                            <?= htmlspecialchars($fullName) ?>
 
-    <div>
+                        </h2>
 
-        <label for="last_name">Last Name</label>
+                        <p class="profile-email">
 
-        <input
-            type="text"
-            id="last_name"
-            name="last_name"
-            value="<?= htmlspecialchars($user['last_name']) ?>"
-            required
-        >
+                            <span class="material-symbols-outlined">mail</span>
 
-    </div>
+                            <?= htmlspecialchars($user['email']) ?>
 
-    <br>
+                        </p>
 
-    <div>
+                        <span class="profile-badge">
 
-        <label for="email">Email</label>
+                            <span class="material-symbols-outlined">verified</span>
 
-        <input
-            type="email"
-            id="email"
-            name="email"
-            value="<?= htmlspecialchars($user['email']) ?>"
-            required
-        >
+                            <?= htmlspecialchars($roleLabel) ?>
 
-    </div>
+                        </span>
 
-    <br>
+                    </div>
 
-    <div>
+                </div>
 
-        <label>User Type</label>
+                <?php if (isset($_SESSION['success'])): ?>
 
-        <input
-            type="text"
-            value="<?= htmlspecialchars((string) $user['user_type']) ?>"
-            readonly
-        >
+                    <div class="auth-message success">
 
-    </div>
+                        <?= htmlspecialchars($_SESSION['success']) ?>
 
-    <?php if ($user['user_type'] === USER_TYPE_STUDENT): ?>
+                    </div>
 
-        <br>
+                    <?php unset($_SESSION['success']); ?>
 
-        <div>
+                <?php endif; ?>
 
-            <label>Year Level</label>
+                <?php if (isset($_SESSION['error'])): ?>
 
-            <input
-                type="text"
-                value="<?= htmlspecialchars((string) $user['year_level']) ?>"
-                readonly
-            >
+                    <div class="auth-message error">
+
+                        <?= htmlspecialchars($_SESSION['error']) ?>
+
+                    </div>
+
+                    <?php unset($_SESSION['error']); ?>
+
+                <?php endif; ?>
+
+                <form
+                    class="auth-form"
+                    action="../../actions/update-profile.php"
+                    method="POST">
+
+                    <!-- ====================================================== -->
+                    <!-- PERSONAL INFORMATION -->
+                    <!-- ====================================================== -->
+
+                    <div class="report-group">
+
+                        <h2 class="report-group-title">
+
+                            Personal Information
+
+                        </h2>
+
+                        <div class="report-grid">
+
+                            <div class="form-group">
+
+                                <label for="first_name">
+
+                                    First Name
+
+                                </label>
+
+                                <div class="input-wrapper">
+
+                                    <span class="material-symbols-outlined input-icon">
+
+                                        person
+
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        id="first_name"
+                                        name="first_name"
+                                        value="<?= htmlspecialchars($user['first_name']) ?>"
+                                        required>
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="last_name">
+
+                                    Last Name
+
+                                </label>
+
+                                <div class="input-wrapper">
+
+                                    <span class="material-symbols-outlined input-icon">
+
+                                        badge
+
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        id="last_name"
+                                        name="last_name"
+                                        value="<?= htmlspecialchars($user['last_name']) ?>"
+                                        required>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="email">
+
+                                Email Address
+
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <span class="material-symbols-outlined input-icon">
+
+                                    mail
+
+                                </span>
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value="<?= htmlspecialchars($user['email']) ?>"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ====================================================== -->
+                    <!-- ACCOUNT INFORMATION -->
+                    <!-- ====================================================== -->
+
+                                        <div class="report-group">
+
+                        <h2 class="report-group-title">
+
+                            Account Information
+
+                        </h2>
+
+                        <div class="form-group">
+
+                            <label>
+
+                                User Type
+
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <span class="material-symbols-outlined input-icon">
+
+                                    school
+
+                                </span>
+
+                                <input
+                                    type="text"
+                                    value="<?= htmlspecialchars((string)$user['user_type']) ?>"
+                                    readonly>
+
+                                <span class="material-symbols-outlined lock-icon">
+
+                                    lock
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <?php if ($user['user_type'] === USER_TYPE_STUDENT): ?>
+
+                            <div class="report-grid">
+
+                                <div class="form-group">
+
+                                    <label>
+
+                                        Year Level
+
+                                    </label>
+
+                                    <div class="input-wrapper">
+
+                                        <span class="material-symbols-outlined input-icon">
+
+                                            workspace_premium
+
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            value="<?= htmlspecialchars((string)$user['year_level']) ?>"
+                                            readonly>
+
+                                        <span class="material-symbols-outlined lock-icon">
+
+                                            lock
+
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label>
+
+                                        Account Expiration
+
+                                    </label>
+
+                                    <div class="input-wrapper">
+
+                                        <span class="material-symbols-outlined input-icon">
+
+                                            event
+
+                                        </span>
+
+                                        <input
+                                            type="date"
+                                            value="<?= htmlspecialchars((string)$user['expiration_date']) ?>"
+                                            readonly>
+
+                                        <span class="material-symbols-outlined lock-icon">
+
+                                            lock
+
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        <?php endif; ?>
+
+                    </div>
+
+                    <div class="auth-message info">
+
+                        <span class="material-symbols-outlined">
+
+                            info
+
+                        </span>
+
+                        <div>
+
+                            <strong>System-managed Information</strong><br>
+
+                            User Type<?php if ($user['user_type'] === USER_TYPE_STUDENT): ?>, Year Level and Account Expiration<?php endif; ?>
+                            are maintained by the administrator and cannot be modified from this page.
+
+                        </div>
+
+                    </div>
+
+                    <div class="report-actions profile-actions">
+
+                        <a href="home.php" class="profile-cancel-link">
+
+                            Cancel
+
+                        </a>
+
+                        <button
+                            class="auth-button"
+                            type="submit">
+
+                            <span class="material-symbols-outlined">save</span>
+
+                            Save Changes
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
 
         </div>
 
-        <br>
+    </section>
 
-        <div>
+</main>
 
-            <label>Account Expiration</label>
-
-            <input
-                type="date"
-                value="<?= htmlspecialchars((string) $user['expiration_date']) ?>"
-                readonly
-            >
-
-        </div>
-
-    <?php endif; ?>
-
-    <br>
-
-    <p>
-        <strong>Note:</strong>
-        User Type<?php if ($user['user_type'] === USER_TYPE_STUDENT): ?>, Year Level, and Account Expiration<?php endif; ?>
-        are managed by the system and cannot be modified from this page.
-        If corrections are needed, please contact the system administrator.
-    </p>
-
-    <br>
-
-    <button type="submit">
-        Save Changes
-    </button>
-
-</form>
-
-</body>
-
-</html>
+<?php require_once __DIR__ . '/../../includes/footer.php'; ?>

@@ -2,17 +2,17 @@
 
 /**
  * ---------------------------------------------------------
- * FEUreka - Lost and Found Management System
- * ---------------------------------------------------------
- * File: category-filter.php
- * Module: User Interface & Public Pages
- *
- * Purpose:
- * Displays category filters for found items.
+ * FEUreka - Category Filter
  * ---------------------------------------------------------
  */
 
 $categories = getCategories();
+
+$currentCategory = isset($_GET['category'])
+    ? (int) $_GET['category']
+    : 0;
+
+$search = $_GET['search'] ?? '';
 ?>
 
 <section class="category-section">
@@ -21,17 +21,56 @@ $categories = getCategories();
 
         <div class="category-list">
 
-            <button class="category-chip active">
-                All Items
-            </button>
+            <!-- All Items -->
+
+            <form method="GET" action="home.php">
+
+                <?php if ($search !== ''): ?>
+
+                    <input
+                        type="hidden"
+                        name="search"
+                        value="<?= htmlspecialchars((string)$search) ?>">
+
+                <?php endif; ?>
+
+                <button
+                    type="submit"
+                    class="category-chip <?= $currentCategory === 0 ? 'active' : '' ?>">
+
+                    All Items
+
+                </button>
+
+            </form>
 
             <?php foreach ($categories as $category): ?>
 
-                <button class="category-chip">
+                <form method="GET" action="home.php">
 
-                    <?= htmlspecialchars($category['category_name']) ?>
+                    <input
+                        type="hidden"
+                        name="category"
+                        value="<?= (int)$category['category_id'] ?>">
 
-                </button>
+                    <?php if ($search !== ''): ?>
+
+                        <input
+                            type="hidden"
+                            name="search"
+                            value="<?= htmlspecialchars((string)$search) ?>">
+
+                    <?php endif; ?>
+
+                    <button
+                        type="submit"
+                        class="category-chip <?= $currentCategory === (int)$category['category_id'] ? 'active' : '' ?>">
+
+                        <?= htmlspecialchars($category['category_name']) ?>
+
+                    </button>
+
+                </form>
 
             <?php endforeach; ?>
 
