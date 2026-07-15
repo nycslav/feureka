@@ -2,7 +2,8 @@
 require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../config/constants.php';
 require_once __DIR__ . '/../../includes/functions.php';
-
+require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/admin-navbar.php';
 requireAdmin();
 
 // 1. Fetch the different active statuses using Lady's existing functions[cite: 1]
@@ -28,7 +29,7 @@ usort($activeItems, function($a, $b) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Active Found Items - FEUreka Admin</title>
+    <title>Approved Found Items - FEUreka Admin</title>
     <!-- Google Material Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <!-- Custom Admin CSS -->
@@ -40,31 +41,7 @@ usort($activeItems, function($a, $b) {
         
         <!-- THE UNIFORM SIDEBAR -->
         <?php $currentPage = basename($_SERVER['PHP_SELF']); ?>
-        <aside class="admin-sidebar">
-            <div class="sidebar-header">
-                <h2>FEUreka Admin</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="dashboard.php" class="<?= $currentPage === 'dashboard.php' ? 'active' : '' ?>">Dashboard</a></li>
-                    <li><a href="pending-found-items.php" class="<?= $currentPage === 'pending-found-items.php' ? 'active' : '' ?>">Pending Found Items</a></li>
-                    
-                    <!-- We can rename the label to Active Found Items so it makes sense to the admin -->
-                    <li><a href="approved-found-items.php" class="<?= $currentPage === 'approved-found-items.php' ? 'active' : '' ?>">Active Found Items</a></li>
-                    
-                    <li><a href="missing-item-reports.php" class="<?= $currentPage === 'missing-item-reports.php' ? 'active' : '' ?>">Missing Item Reports</a></li>
-                    <li><a href="archive-records.php" class="<?= $currentPage === 'archive-records.php' ? 'active' : '' ?>">Archive Records</a></li>
-                    <li><a href="user-management.php" class="<?= $currentPage === 'user-management.php' ? 'active' : '' ?>">User Management</a></li>
-                </ul>
-            </nav>
-            <div class="sidebar-logout">
-                <a href="../../actions/logout-actions.php">
-                    <span class="material-symbols-outlined">logout</span>
-                    Log Out
-                </a>
-            </div>
-        </aside>
-
+        <?php require_once __DIR__ . '/../../includes/admin-sidebar.php'; ?>
         <!-- MAIN CONTENT -->
         <main class="admin-content">
             
@@ -74,8 +51,8 @@ usort($activeItems, function($a, $b) {
             </a>
 
             <div class="admin-header">
-                <h1>Active Found Items</h1>
-                <p>Manage items as they transition through the pipeline (Approved → Under Review → Claimed).</p>
+                <h1>Approved Found Items</h1>
+                <p>View and manage approved found items that are currenlty pusblished and visible to the public.</p>
             </div>
 
             <!-- SUCCESS/ERROR MESSAGES -->
@@ -155,7 +132,7 @@ usort($activeItems, function($a, $b) {
                                             <form action="../../actions/archive-item.php" method="POST" style="margin: 0;">
                                                 <input type="hidden" name="item_id" value="<?= htmlspecialchars((string)$item['item_id']) ?>">
                                                 <input type="hidden" name="table" value="found_items">
-                                                <button type="submit" class="btn" style="padding: 6px 12px; background: rgba(247, 197, 77, 0.1); border-color: #F7C54D;">Archive</button>
+                                                <button type="submit" class="btn" style="padding: 6px 12px; background: rgba(247, 162, 77, 0.68); border-color: #F7C54D;">Archive</button>
                                             </form>
                                         <?php endif; ?>
 
@@ -172,3 +149,4 @@ usort($activeItems, function($a, $b) {
 
 </body>
 </html>
+<?php require_once __DIR__ . '/../../includes/footer.php'; ?>

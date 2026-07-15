@@ -2,7 +2,8 @@
 require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../config/constants.php';
 require_once __DIR__ . '/../../includes/functions.php';
-
+require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/admin-navbar.php';
 requireAdmin();
 
 // 1. Fetch both found items and missing reports from the backend[cite: 3]
@@ -40,30 +41,7 @@ usort($archivedRecords, function($a, $b) {
             // Pure PHP way to get the current file name (e.g., "user-management.php")
             $currentPage = basename($_SERVER['PHP_SELF']); 
         ?>
-        <aside class="admin-sidebar">
-            <div class="sidebar-header">
-                <h2>FEUreka Admin</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="dashboard.php" class="<?= $currentPage === 'dashboard.php' ? 'active' : '' ?>">Dashboard</a></li>
-                    <li><a href="pending-found-items.php" class="<?= $currentPage === 'pending-found-items.php' ? 'active' : '' ?>">Pending Found Items</a></li>
-                    <li><a href="approved-found-items.php" class="<?= $currentPage === 'approved-found-items.php' ? 'active' : '' ?>">Approved Found Items</a></li>
-                    <li><a href="missing-item-reports.php" class="<?= $currentPage === 'missing-item-reports.php' ? 'active' : '' ?>">Missing Item Reports</a></li>
-                    <li><a href="archive-records.php" class="<?= $currentPage === 'archive-records.php' ? 'active' : '' ?>">Archive Records</a></li>
-                    <li><a href="user-management.php" class="<?= $currentPage === 'user-management.php' ? 'active' : '' ?>">User Management</a></li>
-                </ul>
-            </nav>
-            <!-- NEW: LOGOUT BUTTON PINNED TO BOTTOM -->
-            <!-- GLOWING RED LOGOUT BUTTON PINNED TO BOTTOM -->
-            <div class="sidebar-logout">
-                <a href="../../actions/logout-actions.php">
-                    <span class="material-symbols-outlined">logout</span>
-                    Log Out
-                </a>
-            </div>
-        </aside>
-
+        <?php require_once __DIR__ . '/../../includes/admin-sidebar.php'; ?>
         <!-- MAIN CONTENT -->
         <main class="admin-content">
             
@@ -128,3 +106,4 @@ usort($archivedRecords, function($a, $b) {
 
 </body>
 </html>
+<?php require_once __DIR__ . '/../../includes/footer.php'; ?>
