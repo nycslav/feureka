@@ -147,6 +147,7 @@ $itemData = [
     'image' => $imagePath,
 ];
 
+
 if (!submitFoundItem($itemData)) {
     if (is_file($destinationPath)) {
         @unlink($destinationPath);
