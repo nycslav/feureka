@@ -1,56 +1,61 @@
 <?php
 // actions/update-item-status.php
 
-// 1. Include the necessary wiring files so we can access constants, sessions, and functions
 require_once __DIR__ . '/../config/constants.php';
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../includes/functions.php';
 
+<<<<<<< HEAD
 // 2. Security Check: Instantly boot anyone who isn't a logged-in admin
+=======
+// 1. RESTORE AUTHORIZATION: Unleash the bouncer
+>>>>>>> origin/feature/admin
 requireAdmin();
 
-// 3. Verify that data was actually sent via a form submission (POST method)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    // 4. Catch the data sent from the HTML form's hidden inputs
-    // We use isset() to check if the data exists, and (int) to ensure the ID is a safe number
-    $item_id = isset($_POST['item_id']) ? (int)$_POST['item_id'] : 0;
-    $status  = isset($_POST['status']) ? trim($_POST['status']) : '';
+    // Securely capture incoming data
+    $item_id = filter_input(INPUT_POST, 'item_id', FILTER_VALIDATE_INT);
+    $status  = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_STRING);
+    $notes   = filter_input(INPUT_POST, 'notes', FILTER_SANITIZE_STRING);
     
-    // Admin notes are optional, so we allow it to be null if not provided
-    $notes   = isset($_POST['notes']) ? trim($_POST['notes']) : null; 
+    // 2. SUPPORT BOTH TABLES: Dynamically accept the table from the form
+    $table = filter_input(INPUT_POST, 'table', FILTER_SANITIZE_STRING); 
     
-    // 5. Get the ID of the admin who is currently logged in and clicking the button
+    // Safety fallback: Ensure it only ever hits these two specific tables
+    if (!$table || !in_array($table, ['found_items', 'missing_reports'])) {
+        $table = 'found_items';
+    }
+
     $adminId = $_SESSION['user_id'];
     
-    // 6. Basic Validation: Ensure we actually have an ID and a status before bothering the database
-    if ($item_id > 0 && $status !== '') {
+    if ($item_id && $status) {
         
-        // 7. THE HANDOFF: Call Lady's database function!
-        // We pass the table name ('found_items'), the item ID, the new status, the admin's ID, and any notes.
-        // Even though her function currently just returns `false` (as a placeholder), 
-        // this will perfectly connect to her real SQL code once she finishes it.
-        $success = updateItemStatus('found_items', $item_id, $status, $adminId, $notes);
+        // 3. MATCH PARAMETERS: Pass the dynamic $table instead of hardcoding 'found_items'
+        // Signature: updateItemStatus($table, $itemId, $status, $adminId, $notes)
+        $success = updateItemStatus($table, $item_id, $status, $adminId, $notes);
         
-        // 8. Redirect the admin based on the result
+        // Hook into the new UI alert banners instead of URL GET parameters
         if ($success) {
-            // Send them back to the pending items page with a success message in the URL
-            header("Location: " . BASE_URL . "views/admin/pending-found-items.php?msg=success");
-            exit;
+            $cleanStatus = strtoupper(str_replace('_', ' ', $status));
+            $_SESSION['success_message'] = "Item status successfully updated to {$cleanStatus}.";
         } else {
-            // Send them back with an error message
-            header("Location: " . BASE_URL . "views/admin/pending-found-items.php?msg=db_error");
-            exit;
+            $_SESSION['error_message'] = "Failed to update item status. Please try again.";
         }
     } else {
-        // Send them back if the form data was corrupted or missing
-        header("Location: " . BASE_URL . "views/admin/pending-found-items.php?msg=invalid_data");
-        exit;
+        $_SESSION['error_message'] = "Invalid data submitted.";
     }
+
+    // 4. FIX ROUTING VARIABLES: Drop the undefined BASE_URL and use smart relative paths
+    if ($table === 'missing_reports') {
+        header("Location: ../views/admin/missing-item-reports.php");
+    } else {
+        header("Location: ../views/admin/approved-found-items.php");
+    }
+    exit;
+    
 } else {
-    // If someone tries to just type this file's URL directly into their browser, 
-    // it's a GET request, not a POST. We kick them back to the dashboard.
-    header("Location: " . BASE_URL . "views/admin/dashboard.php");
+    // Fallback for direct browser access (GET request)
+    header("Location: ../views/admin/dashboard.php");
     exit;
 }
-?>
