@@ -23,11 +23,17 @@ body {
    2. SIDEBAR
 =========================== */
 .admin-sidebar {
-    background: #08110D; /* Darkest green */
+    background: #08110D; 
     width: 260px;
     border-radius: 20px;
     padding: 30px 20px;
-    border: 1px solid rgba(247, 197, 77, 0.2); /* Subtle gold border */
+    border: 1px solid rgba(247, 197, 77, 0.2); 
+    /* NEW: Flexbox to push the logout button to the bottom */
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 120px); 
+    position: sticky;
+    top: 32px;
 }
 
 .sidebar-header h2 {
@@ -37,10 +43,14 @@ body {
     margin-bottom: 30px;
     font-weight: 700;
 }
+.sidebar-nav {
+    flex: 1; /* Pushes everything below it to the bottom */
+}
 
 .sidebar-nav ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .sidebar-nav li {
@@ -71,6 +81,37 @@ body {
     border: 1px solid #F7C54D; /* Gold outline */
     box-shadow: 0 0 15px rgba(247, 197, 77, 0.3); /* The outer glow effect */
     font-weight: 700;
+}
+/* ===========================
+   NEW: LOGOUT BUTTON
+=========================== */
+.sidebar-logout {
+    margin-top: auto; /* Anchors the wrapper to the absolute bottom */
+    padding-top: 20px;
+}
+
+.sidebar-logout a {
+    text-decoration: none;
+    color: #ff4c4c; /* Bright red text */
+    font-weight: 700;
+    font-size: 1.05em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    border-radius: 10px;
+
+    /* The Permanent Red Glow */
+    background: rgba(255, 76, 76, 0.1); 
+    border: 1px solid #ff4c4c; 
+    box-shadow: 0 0 15px rgba(255, 76, 76, 0.4); 
+    transition: all 0.2s ease;
+}
+
+.sidebar-logout a:hover {
+    background: #ff4c4c;
+    color: #08110D;
+    box-shadow: 0 0 15px rgba(255, 76, 76, 0.3);
 }
 /* ===========================
    3. HEADER & BACK BUTTON

@@ -6,9 +6,6 @@ require_once __DIR__ . '/../config/constants.php';
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../includes/functions.php';
 
-// TRICK THE SYSTEM FOR TESTING: Pretend Admin #1 is logged in
-$_SESSION['user_id'] = 1;
-
 // 2. The Bouncer
 requireAdmin();
 
