@@ -49,6 +49,36 @@
             </a>
 
         </div>
+
+        <!-- Right Section -->
+        <div class="navbar-right">
+
+            <!-- Guest Actions -->
+            <div class="navbar-guest-actions">
+
+                <!-- Reserved for Login button -->
+
+            </div>
+
+            <!-- Authenticated User Actions -->
+            <div class="navbar-user-actions">
+
+                <a
+                    href="profile.php"
+                    class="navbar-icon-button"
+                    aria-label="Profile">
+
+                    <span class="material-symbols-outlined">
+
+                        person
+
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
     </nav>
 
 </header>
