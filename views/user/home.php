@@ -21,7 +21,16 @@ require_once __DIR__ . '/../../includes/navbar.php';
 
     <?php
 
-    $items = getApprovedItems();
+    $search = trim($_GET['search'] ?? '');
+
+    $categoryId = isset($_GET['category'])
+        ? (int) $_GET['category']
+        : null;
+
+    $items = searchAndFilterItems(
+        $search,
+        $categoryId
+    );
 
     ?>
 
